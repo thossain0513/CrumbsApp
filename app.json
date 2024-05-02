@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "CrumbsApp",
+    "slug": "CrumbsApp",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
