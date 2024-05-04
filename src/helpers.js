@@ -15,11 +15,9 @@ async function generateImage(prompt) {
     if (response.ok) {
       return result.data;
     } else {
-      console.log(error + "errored at place 1")
       throw new Error(result.error || "Failed to fetch data");
     }
   } catch (error) {
-    console.log(error.message + "errored at place 2")
     throw new Error(error.message || "An error occurred");
   }
 }

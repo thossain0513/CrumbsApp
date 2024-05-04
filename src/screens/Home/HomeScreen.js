@@ -3,8 +3,11 @@ import React from 'react';
 import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
+import { }
+
+
 ex_image = require('../../../assets/images/recipe.jpeg');
-const RecipeCard = ({ name, image }) => {
+const RecipeCard = ({ item }) => {
   return (
     <TouchableHighlight onPress={() => navigate('RecipeScreen')} underlayColor={styles.underlay}>
       <View tw="flex flex-col h-48 justify-end rounded-lg overflow-hidden shadow-md mx-5 px-0 mb-5 mt-5">
@@ -35,8 +38,7 @@ export default function HomeScreen() {
             data={recipes}
             renderItem={({ item }) => (
               <RecipeCard
-              name={item.name}
-              image={item.image}
+              item={item}
               />
             )}
             keyExtractor={(item) => item.id.toString()}
