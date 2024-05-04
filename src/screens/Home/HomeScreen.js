@@ -3,7 +3,8 @@ import React from 'react';
 import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
-import generateImage from '../../helpers'
+import generateImage from '../../helpers';
+import {chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
 
 
 const RecipeCard = ({ item }) => {
