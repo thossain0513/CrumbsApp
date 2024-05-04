@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, FlatList } from 'react-native';
+import React, { useState, useEffect} from 'react';
+import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
 import generateImage from '../../helpers';
@@ -8,19 +8,23 @@ import { chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, choc
 
 
 const RecipeCard = ({ item }) => {
-  const [ex_image, setExImage] = useState(null);
+
+const [image, setImage] = useState(null);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
 
 useEffect(() => {
+
   const fetchData = async () => {
     setLoading(true);
     try {
       const imgSrc = await generateImage(item.name);
-      setExImage(imgSrc);
+      setImage(imgSrc);
+
     } catch (error) {
       console.error('Error fetching image:', error.message);
       setError(error.message || 'An error occurred');
+
     } finally {
       setLoading(false);
     }
@@ -39,10 +43,10 @@ if (error) {
     <TouchableHighlight onPress={() => navigate('RecipeScreen')} underlayColor={styles.underlay}>
       <View tw="flex flex-col h-48 justify-end rounded-lg overflow-hidden shadow-md mx-5 px-0 mb-5 mt-5">
         <Image
-        source={ {uri: imgSrc} }
+        source={ {uri: image} }
         tw="absolute w-full h-full object-cover" />
         <View tw="flex h-[25%] justify-center overflow-hidden bg-gray-200 opacity-75">
-        <Text tw="text-center font-bold text-l text-opacity-100">{name}</Text>
+        <Text tw="text-center font-bold text-l text-opacity-100">{item.name}</Text>
         </View>
       
 
