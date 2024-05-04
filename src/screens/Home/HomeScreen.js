@@ -4,7 +4,7 @@ import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, F
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
 import generateImage from '../../helpers';
-import {chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
+import { chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
 
 
 const RecipeCard = ({ item }) => {
@@ -54,13 +54,17 @@ if (error) {
 };
 
 export default function HomeScreen() {
+
   const recipes = [
-    { id: 1, name: 'Recipe 1', image: ex_image },
-    { id: 2, name: 'Recipe 2', image: ex_image },
-    { id: 3, name: 'Recipe 3', image: ex_image },
+    chickenParmesan, 
+    grilledCheese, 
+    chickenFajitas, 
+    roastedVegetables, 
+    chocolateCake, 
+    chickenTikkaMasala
   ];
+
     return (
-        <ScrollView tw="flex flex-col bg-white" style={styles.homeScreen}>
             <FlatList
             data={recipes}
             renderItem={({ item }) => (
@@ -68,11 +72,8 @@ export default function HomeScreen() {
               item={item}
               />
             )}
-            keyExtractor={(item) => item.id.toString()}
+            keyExtractor={(item) => item.name.toString()}
             />
-
-            {/*  */}
-        </ScrollView>
     )
 }
 
