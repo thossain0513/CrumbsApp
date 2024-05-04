@@ -3,10 +3,8 @@ import React from 'react';
 import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
-import { }
 
 
-ex_image = require('../../../assets/images/recipe.jpeg');
 const RecipeCard = ({ item }) => {
   return (
     <TouchableHighlight onPress={() => navigate('RecipeScreen')} underlayColor={styles.underlay}>

@@ -1,6 +1,6 @@
-import { createRecipe } from './Recipe'
+import createRecipe from './Recipe'
 
-export const chickenParmesan = createRecipe ({
+export const chickenParmesan = createRecipe({
 name: 'Chicken Parmesan',
 ingredients: ['chicken breasts', 'tomato sauce', 'mozzarella cheese', 'basil'],
 instructions: [
@@ -11,7 +11,7 @@ cookingTime: 30,
 servings: 4
 });
 
-export const grilledCheese = createRecipe ({
+export const grilledCheese = createRecipe({
     name: 'Grilled Cheese',
     ingredients: ['bread', 'cheese'],
     instructions: [
@@ -22,7 +22,7 @@ export const grilledCheese = createRecipe ({
     servings: 1
 });
 
-export const chickenFajitas = createRecipe ({
+export const chickenFajitas = createRecipe({
     name: 'Chicken Fajitas',
     ingredients: ['chicken breasts', 'bell peppers', 'onions', 'tortillas'],
     instructions: [
@@ -35,7 +35,7 @@ export const chickenFajitas = createRecipe ({
     servings: 4
   });
 
-  export const roastedVegetables = createRecipe ({
+  export const roastedVegetables = createRecipe({
     name: 'Roasted Vegetables',
     ingredients: ['carrots', 'broccoli', 'sweet potatoes'],
     instructions: ['Toss with oil and seasoning', 'Roast in oven'],
@@ -43,7 +43,7 @@ export const chickenFajitas = createRecipe ({
     servings: 6
   });
 
-  export const chocolateCake = createRecipe ({
+  export const chocolateCake = createRecipe({
     name: 'Chocolate Cake',
     ingredients: ['flour', 'sugar', 'eggs', 'chocolate'],
     instructions: [
@@ -55,7 +55,7 @@ export const chickenFajitas = createRecipe ({
     servings: 8
   });
 
-  export const chickenTikkaMasala = createRecipe ({
+  export const chickenTikkaMasala = createRecipe({
     name: 'Chicken Tikka Masala',
     ingredients: ['chicken breasts', 'yogurt', 'spices', 'basmati rice'],
     instructions: [
