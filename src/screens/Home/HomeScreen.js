@@ -70,7 +70,7 @@ export default function HomeScreen() {
 
     return (
             <FlatList
-            data={recipes}
+            data={recipes.slice(0, 5)}
             renderItem={({ item }) => (
               <RecipeCard
               item={item}
