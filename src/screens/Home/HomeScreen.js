@@ -36,26 +36,29 @@ export default function HomeScreen() {
     chickenFajitas, 
     roastedVegetables, 
     chocolateCake,
-     chickenTikkaMasala].slice(0, 5);
+    chickenTikkaMasala].slice(0, 4);
+  
+     const updatedRecipes = [];
 
-     useEffect(() => {
-      const fetchImages = async () => {
-        const updatedRecipes = [];
-        for (const recipe of recipes) {
-          try {
-            const imgSrc = await generateImage(recipe.name);
-            const updatedRecipe = { ...recipe, image: imgSrc };
-            updatedRecipes.push(updatedRecipe);
-          } catch (error) {
-            console.error('Error fetching image:', error.message);
-            // Handle error if needed
-          }
+  useEffect(() => {
+    const fetchImages = async () => {
+      for (const recipe of recipes) {
+        try {
+          const imgSrc = await generateImage(recipe.name);
+          const updatedRecipe = { ...recipe, image: imgSrc };
+          updatedRecipes.push(updatedRecipe);
+        } catch (error) {
+          console.error('Error fetching image:', error.message);
+          // Handle error if needed
         }
-        setImageSources(updatedRecipes);
+      }
+      setImageSources(updatedRecipes);
+      if (updatedRecipes.length === recipes.length) {
         setLoading(false);
-      };
-      fetchImages();
-    }, [recipes]);
+      }
+    };
+    fetchImages();
+  }, []);
 
   return (
     <View style={{ flex: 1 }}>
@@ -63,7 +66,7 @@ export default function HomeScreen() {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <FlatList
-          data={recipes}
+          data={updatedRecipes}
           renderItem={({ item }) => (
             <RecipeCard
               item={item}
