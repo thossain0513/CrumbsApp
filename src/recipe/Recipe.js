@@ -5,6 +5,7 @@ function createRecipe({
   instructions,
   cookingTime,
   servings,
+  url=null,
 }) {
   return {
     name,
@@ -12,6 +13,7 @@ function createRecipe({
     instructions,
     cookingTime,
     servings,
+    url
   };
 }
 

@@ -1,26 +1,42 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect} from 'react';
-import {StyleSheet, View, Button, Text, Image, TouchableHighlight, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import { View, Button, Text, Image, TouchableHighlight, FlatList, ActivityIndicator, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
 import generateImage from '../../helpers';
 import { chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
+import styles from './styles';
 
 const placeholderImage = 'https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png';
-const RecipeCard = ({ item }) => {
-  
+const { width, height } = Dimensions.get('window');
+
+
+
+const RecipeImage = ({ imageUrl }) => (
+  <View style={styles.imageContainer}>
+    <Image
+      source={{ uri: imageUrl }}
+      style={styles.image}
+    />
+  </View>
+);
+
+const RecipeText = ({ name }) => (
+  <View style={styles.textContainer}>
+    <Text style={styles.text}>{name}</Text>
+  </View>
+);
+
+
+const RecipeCard = ({ item, style }) => {
   imageUrl = item.image || placeholderImage;
+  console.log(imageUrl)
 
   return (
-    <TouchableHighlight onPress={() => navigate('RecipeScreen')} underlayColor={styles.underlay}>
-      <View tw="flex flex-col h-48 justify-end rounded-lg overflow-hidden shadow-md mx-5 px-0 mb-5 mt-5">
-        <Image
-          source={{ uri: imageUrl }}
-          tw="absolute w-full h-full object-cover"
-        />
-        <View tw="flex h-[25%] justify-center overflow-hidden bg-gray-200 opacity-75">
-          <Text tw="text-center font-bold text-l text-opacity-100">{item.name}</Text>
-        </View>
+    <TouchableHighlight onPress={() => navigate('RecipeScreen')} style={[styles.cardContainer, style]}>
+      <View style={styles.imageTextContainer}>
+        <RecipeImage imageUrl={imageUrl} />
+        <RecipeText name={item.name} />
       </View>
     </TouchableHighlight>
   );
@@ -30,7 +46,6 @@ const RecipeCard = ({ item }) => {
 export default function HomeScreen() {
 
   const [loading, setLoading] = useState(true);
-  const [imageSources, setImageSources] = useState({});
   const [updatedRecipes, setUpdatedRecipes] = useState([]);
   const [hasRun, setHasRun] = useState(false);
 
@@ -45,17 +60,17 @@ export default function HomeScreen() {
 
      useEffect(() => {
       if (!hasRun) {
-      console.log('Use effect running again');
+      console.log('Use effect running again'); //logging
       const fetchImages = async () => {
       const updatedRecipesTemp = [];
       for (const recipe of recipes) {
       try {
-        const imgSrc = await generateImage(recipe.name);
+        //const imgSrc = await generateImage(recipe.name);
         console.log('image arrived'); //checking if images arrived
-        const updatedRecipe = { ...recipe, image: imgSrc };
+        const updatedRecipe = { ...recipe, image: placeholderImage };
         updatedRecipesTemp.push(updatedRecipe);
       } catch (error) {
-        console.error('Error fetching images:', error.message);
+        console.error('Error fetching images:', error.message); //logging
         const updatedRecipe = { ...recipe, image: placeholderImage }; 
         updatedRecipesTemp.push(updatedRecipe)
       }
@@ -77,26 +92,23 @@ export default function HomeScreen() {
             <ActivityIndicator size="large" color="#0000ff" />
           </View>
         ) : (
+          <SafeAreaView style={styles.container}>
           <FlatList
             data={updatedRecipes}
             renderItem={({ item }) => (
+              console.log("rendering"),
               <RecipeCard
                 item={item}
               />
             )}
             keyExtractor={(item) => item.name.toString()}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            contentContainerStyle={styles.flatListContent}
           />
+          
+          </SafeAreaView>
         )
       );
   }
 
 
-const styles = StyleSheet.create({
-  underlay: {
-    underlayColor: 'rgba(0, 0, 0, 0.1)'
-  },
-  homeScreen: {
-    marginTop: '30%',
-    marginBottom: 20
-  }
-});
