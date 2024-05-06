@@ -1,12 +1,9 @@
-import { StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 
 const { width, height } = Dimensions.get('window');
 
-
-
-const styles = StyleSheet.create({
+export default styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 0.1 * height,
@@ -43,7 +40,8 @@ const styles = StyleSheet.create({
       },
       image: {
         flex: 1,
-        resizeMode: 'cover' // Ensures the image covers the area without being distorted
+        resizeMode: 'cover', // Ensures the image covers the area without being distorted
+        borderRadius: 10
       },
       textContainer: {
         position: 'absolute',
@@ -87,5 +85,3 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
   });
-
-  export default styles;

@@ -103,6 +103,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
+            <RecipeCard item={updatedRecipes[0]} style={{width: '85%', height: '55%', marginBottom: '5%'}} />
               <FlatList
                 data={updatedRecipes}
                 renderItem={({ item }) => (
