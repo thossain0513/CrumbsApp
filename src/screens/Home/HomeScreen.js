@@ -6,6 +6,7 @@ import { tw } from 'nativewind';
 import generateImage from '../../helpers';
 import { chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
 import styles from './styles';
+import AutoAnimatedImage from './AutoAnimatedImage';
 
 const placeholderImage = 'https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png';
 const { width, height } = Dimensions.get('window');
@@ -45,7 +46,7 @@ const RecipeCard = ({ item, style }) => {
   return (
     <TouchableHighlight onPress={() => navigate('RecipeScreen')} style={[styles.cardContainer, style]}>
       <View style={styles.imageTextContainer}>
-        <RecipeImage imageUrl={imageUrl} />
+        <AutoAnimatedImage imageUrl={imageUrl} />
         <RecipeText name={item.name} />
       </View>
     </TouchableHighlight>
