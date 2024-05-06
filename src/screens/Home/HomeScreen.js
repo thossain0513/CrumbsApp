@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect} from 'react';
-import { View, Button, Text, Image, TouchableHighlight, FlatList, ActivityIndicator, Dimensions } from 'react-native';
+import { View, Button, Text, Image, TouchableHighlight, FlatList, ActivityIndicator, Dimensions, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tw } from 'nativewind';
 import generateImage from '../../helpers';
@@ -27,6 +27,16 @@ const RecipeText = ({ name }) => (
   </View>
 );
 
+const FooterNav = ({ navigation, style }) => {
+  return (
+    <View style={styles.footer}>
+        <Button title="Home" onPress={() => navigation.navigate('Home')} />
+        <Button title="Generate" onPress={() => navigation.navigate('Generate')} />
+        <Button title="Profile" onPress={() => navigation.navigate('Profile')} />
+        {/* Add more buttons as needed, pointing to different parts of the app */}
+    </View>
+  );
+};
 
 const RecipeCard = ({ item, style }) => {
   imageUrl = item.image || placeholderImage;
@@ -43,7 +53,7 @@ const RecipeCard = ({ item, style }) => {
 };
 
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
 
   const [loading, setLoading] = useState(true);
   const [updatedRecipes, setUpdatedRecipes] = useState([]);
@@ -93,19 +103,17 @@ export default function HomeScreen() {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
-          <FlatList
-            data={updatedRecipes}
-            renderItem={({ item }) => (
-              console.log("rendering"),
-              <RecipeCard
-                item={item}
+              <FlatList
+                data={updatedRecipes}
+                renderItem={({ item }) => (
+                  console.log("rendering"),
+                  <RecipeCard item={item}/>
+                )}
+                keyExtractor={(item) => item.name.toString()}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
+                contentContainerStyle={styles.flatListContent}
               />
-            )}
-            keyExtractor={(item) => item.name.toString()}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-            contentContainerStyle={styles.flatListContent}
-          />
-          
+              <FooterNav navigation={navigation}  />
           </SafeAreaView>
         )
       );

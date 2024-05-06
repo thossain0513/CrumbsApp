@@ -9,11 +9,11 @@ const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#dc143c',
-        justifyContent: 'flex-start',
         paddingTop: 0.1 * height,
         alignItems: 'center',
-        backgroundColor: 'blue'
+        backgroundColor: 'blue',
+        justifyContent: 'flex-start',
+        position: 'relative'
     },
 
     cardContainer: {
@@ -68,7 +68,24 @@ const styles = StyleSheet.create({
         alignItems: 'center', // Ensures all items are centrally aligned
         width: '100%',
         
-      }
+      },
+
+      footer: {
+        position: 'absolute',   // Position the footer absolutely within its container
+        left: 0,                // Align to the left edge of the container
+        right: 0,               // Align to the right edge of the container
+        bottom: 0,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: '#eee',
+        width: '100%',
+        height: '10%'
+
+    },
+    scrollFooterContainer: {
+        alignItems: 'center', // Center items vertically within the scroll view
+        flexDirection: "row",
+    },
   });
 
   export default styles;
