@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'black', // Or any other suitable color
+    backgroundColor: 'white', // Or any other suitable color
   },
   fullSize: {
     width: '100%',

@@ -39,14 +39,14 @@ const FooterNav = ({ navigation, style }) => {
   );
 };
 
-const RecipeCard = ({ item, style }) => {
+const RecipeCard = ({ item, style, animated=false }) => {
   imageUrl = item.image || placeholderImage;
   console.log(imageUrl)
 
   return (
     <TouchableHighlight onPress={() => navigate('RecipeScreen')} style={[styles.cardContainer, style]}>
       <View style={styles.imageTextContainer}>
-        <AutoAnimatedImage imageUrl={imageUrl} />
+        {animated ? <AutoAnimatedImage imageUri={imageUrl} />: <RecipeImage imageUrl={imageUrl}/>}
         <RecipeText name={item.name} />
       </View>
     </TouchableHighlight>
@@ -104,16 +104,17 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
-            <RecipeCard item={updatedRecipes[0]} style={{width: '85%', height: '55%', marginBottom: '5%'}} />
+            <RecipeCard item={updatedRecipes[0]} style={{width: '85%', height: '55%', marginBottom: '5%'}} animated={true}/>
               <FlatList
                 data={updatedRecipes}
                 renderItem={({ item }) => (
                   console.log("rendering"),
-                  <RecipeCard item={item}/>
+                  <RecipeCard item={item} style={{width: width * 0.4 , height: height * 0.2, marginBottom: '5%', marginHorizontal: '3%'}}/>
                 )}
                 keyExtractor={(item) => item.name.toString()}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.flatListContent}
+                numColumns={2}
               />
               <FooterNav navigation={navigation}  />
           </SafeAreaView>

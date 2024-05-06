@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
         flex: 1,
         paddingTop: 0.1 * height,
         alignItems: 'center',
-        backgroundColor: 'blue',
+        backgroundColor: '#F5E9D9',
         justifyContent: 'flex-start',
         position: 'relative'
     },
@@ -18,12 +18,8 @@ export default styles = StyleSheet.create({
         borderRadius: 10,
         overflow: 'hidden',
         elevation: 3,
-        shadowOpacity: 0.3,
-        shadowRadius: 3,
-        shadowOffset: { width: 0, height: 2 },
         backgroundColor: 'yellow',
         minWidth: 100, // Minimum width to ensure the card is visible
-        minHeight: height* 0.25, // Minimum height to ensure the card is visible
         alignSelf: 'center', // Center the card in the flat list
         width: width * 0.85,
          // 85% of the screen width for responsiveness
