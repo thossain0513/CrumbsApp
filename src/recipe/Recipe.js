@@ -3,17 +3,19 @@ function createRecipe({
   name,
   ingredients,
   instructions,
-  cookingTime,
+  cuisine,
+  prepTime,
   servings,
-  url=null,
+  image=null,
 }) {
   return {
     name,
     ingredients,
     instructions,
-    cookingTime,
+    cuisine,
+    prepTime,
     servings,
-    url
+    image
   };
 }
 

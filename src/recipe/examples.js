@@ -7,7 +7,8 @@ instructions: [
     'Preheat oven to 400°F', 
     'Bread chicken with breadcrumbs', 
     'Bake for 20 minutes'],
-cookingTime: 30,
+cuisine: 'American',
+prepTime: "30 minutes",
 servings: 4
 });
 
@@ -18,7 +19,8 @@ export const grilledCheese = createRecipe({
         'Butter bread', 
         'Place cheese', 
         'Grill until golden'],
-    cookingTime: 5,
+    cuisine: 'American',
+    prepTime: '5 minutes',
     servings: 1
 });
 
@@ -31,7 +33,8 @@ export const chickenFajitas = createRecipe({
       'Cook chicken',
       'Serve with tortillas'
     ],
-    cookingTime: 30,
+    cuisine: 'Mexican',
+    prepTime: '30 Minutes',
     servings: 4
   });
 
@@ -39,7 +42,8 @@ export const chickenFajitas = createRecipe({
     name: 'Roasted Vegetables',
     ingredients: ['carrots', 'broccoli', 'sweet potatoes'],
     instructions: ['Toss with oil and seasoning', 'Roast in oven'],
-    cookingTime: 25,
+    cuisine: "White People Food",
+    prepTime: "25 minutes",
     servings: 6
   });
 
@@ -51,7 +55,8 @@ export const chickenFajitas = createRecipe({
       'Mix ingredients',
       'Bake until done'
     ],
-    cookingTime: 35,
+    cuisine: "Dessert",
+    prepTime: "35 minutes",
     servings: 8
   });
 
@@ -63,6 +68,7 @@ export const chickenFajitas = createRecipe({
       'Cook in sauce',
       'Serve with rice'
     ],
-    cookingTime: 40,
+    cuisine: "Indian",
+    prepTime: "30 minutes",
     servings: 6
   });

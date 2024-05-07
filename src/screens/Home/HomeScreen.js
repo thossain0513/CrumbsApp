@@ -7,9 +7,12 @@ import generateImage from '../../helpers';
 import { chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
 import styles from './styles';
 import AutoAnimatedImage from './AutoAnimatedImage';
+import FooterNav from '../../components/FooterNav';
+import DividerLine from '../../components/DividerLine';
 
 const placeholderImage = 'https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png';
 const { width, height } = Dimensions.get('window');
+windowWidth = width*0.85
 
 
 
@@ -28,23 +31,12 @@ const RecipeText = ({ name }) => (
   </View>
 );
 
-const FooterNav = ({ navigation, style }) => {
-  return (
-    <View style={styles.footer}>
-        <Button title="Home" onPress={() => navigation.navigate('Home')} />
-        <Button title="Generate" onPress={() => navigation.navigate('Generate')} />
-        <Button title="Profile" onPress={() => navigation.navigate('Profile')} />
-        {/* Add more buttons as needed, pointing to different parts of the app */}
-    </View>
-  );
-};
-
-const RecipeCard = ({ item, style, animated=false }) => {
+const RecipeCard = ({ item, navigation, style, animated=false }) => {
   imageUrl = item.image || placeholderImage;
   console.log(imageUrl)
 
   return (
-    <TouchableHighlight onPress={() => navigate('RecipeScreen')} style={[styles.cardContainer, style]}>
+    <TouchableHighlight onPress={() => navigation.navigate('RecipeScreen', { recipe: item })} style={[styles.cardContainer, style]}>
       <View style={styles.imageTextContainer}>
         {animated ? <AutoAnimatedImage imageUri={imageUrl} />: <RecipeImage imageUrl={imageUrl}/>}
         <RecipeText name={item.name} />
@@ -104,19 +96,20 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
-            <RecipeCard item={updatedRecipes[0]} style={{width: '85%', height: '55%', marginBottom: '5%'}} animated={true}/>
+            <RecipeCard item={updatedRecipes[0]} style={{width: windowWidth, height: '60%', marginBottom: '5%'}} animated={true} navigation={navigation}/>
+            <DividerLine style={{ width: windowWidth, alignSelf: 'center'}} color={'#505050'}/>
               <FlatList
                 data={updatedRecipes}
                 renderItem={({ item }) => (
                   console.log("rendering"),
-                  <RecipeCard item={item} style={{width: width * 0.4 , height: height * 0.2, marginBottom: '5%', marginHorizontal: '3%'}}/>
+                  <RecipeCard item={item} style={{width: width * 0.4 , height: height * 0.2, marginBottom: '5%', marginHorizontal: '3%'}} navigation={navigation}/>
                 )}
                 keyExtractor={(item) => item.name.toString()}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.flatListContent}
                 numColumns={2}
               />
-              <FooterNav navigation={navigation}  />
+              <FooterNav navigation={navigation} />
           </SafeAreaView>
         )
       );

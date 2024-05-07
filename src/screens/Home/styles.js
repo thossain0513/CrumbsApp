@@ -33,9 +33,9 @@ export default styles = StyleSheet.create({
       imageContainer: {
         height: '100%', // Ensures the image container takes the full height of its parent
         width: '100%', // Ensures the image container takes the full width of its parent
+        borderRadius: 10
       },
       image: {
-        flex: 1,
         resizeMode: 'cover', // Ensures the image covers the area without being distorted
         borderRadius: 10
       },
@@ -63,19 +63,6 @@ export default styles = StyleSheet.create({
         width: '100%',
         
       },
-
-      footer: {
-        position: 'absolute',   // Position the footer absolutely within its container
-        left: 0,                // Align to the left edge of the container
-        right: 0,               // Align to the right edge of the container
-        bottom: 0,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        backgroundColor: '#eee',
-        width: '100%',
-        height: '10%'
-
-    },
     scrollFooterContainer: {
         alignItems: 'center', // Center items vertically within the scroll view
         flexDirection: "row",

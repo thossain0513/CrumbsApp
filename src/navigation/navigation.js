@@ -13,7 +13,7 @@ export default function Navigation() {
     <NavigationContainer>
         <Stack.Navigator screenOptions = {styles.screenOptions}>
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Recipe" component={RecipeScreen} />
+            <Stack.Screen name="RecipeScreen" component={RecipeScreen} />
         </Stack.Navigator>
         </NavigationContainer>
   )
