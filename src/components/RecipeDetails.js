@@ -1,11 +1,13 @@
 // RecipeDetails.js
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import DividerLine from './DividerLine';
 
 const RecipeDetails = ({ name, cuisine, prepTime, servings }) => {
   return (
     <View style={styles.details}>
       <Text style={styles.title}>{name}</Text>
+      <DividerLine style={{ width: windowWidth, alignSelf: 'flex-start', marginTop: '2%'}} color={'#505050'}/>
       <Text style={styles.subtitle}>{cuisine}</Text>
       <View style={styles.info}>
         <Text style={styles.infoText}>Prep Time: {prepTime} mins</Text>
