@@ -2,6 +2,10 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import DividerLine from './DividerLine';
+import { Dimensions } from 'react-native';
+
+const {width, hight} = Dimensions.get("window")
+var windowWidth = width * 0.85;
 
 const RecipeDetails = ({ name, cuisine, prepTime, servings }) => {
   return (

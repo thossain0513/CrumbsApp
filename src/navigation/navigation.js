@@ -1,26 +1,54 @@
+import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, StyleSheet } from "react-native";
-import React from 'react';
+import { View, Text, StyleSheet, Dimensions, Animated } from "react-native";
 import HomeScreen from "../screens/Home/HomeScreen";
 import RecipeScreen from "../screens/Recipe/RecipeScreen";
 
 const Stack = createNativeStackNavigator();
 
-
-export default function Navigation() {
-  return (
-    <NavigationContainer>
-        <Stack.Navigator screenOptions = {styles.screenOptions}>
+// Define the stack navigator in a separate function
+function MyStack() {
+    return (
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+            presentation: 'modal',
+            gestureEnabled: true,
+            cardOverlayEnabled: true,
+            cardStyleInterpolator: ({ current, layouts }) => ({
+              cardStyle: {
+                transform: [
+                  {
+                    translateY: current.progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [layouts.screen.height, 0],
+                    }),
+                  },
+                ],
+              },
+              overlayStyle: {
+                opacity: current.progress.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: [0, 0.5, 0.5],  // Fades in to 50% opacity, stays until fully opened
+                }),
+              },
+            }),
+          }}
+        >
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="RecipeScreen" component={RecipeScreen} />
         </Stack.Navigator>
-        </NavigationContainer>
-  )
+    );
 }
 
-const styles = StyleSheet.create({
-    screenOptions: {
-        headerShown: false,
-    }
-})
+// Main navigation component
+export default function Navigation() {
+  return (
+    <NavigationContainer>
+        <MyStack />
+    </NavigationContainer>
+  );
+}
+
+// Since StyleSheet is not used for navigation options, you can use it for other styling purposes in this file.
