@@ -1,27 +1,19 @@
-// Accordion.js
-
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import DividerLine from './DividerLine';
 
+const windowWidth = Dimensions.get('window').width;
+
 const Accordion = ({ title, data = [] }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleOpen = () => setIsOpen(!isOpen);
-
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.sectionHeader}
-        onPress={toggleOpen}
-      >
+      <View style={styles.sectionHeader}>
         <Text style={styles.headerText}>{title}</Text>
-        <DividerLine style={{ width: windowWidth, alignSelf: 'flex-start', marginTop: '2%'}} color={'#505050'}/>
-      </TouchableOpacity>
-      {isOpen && data.map((item, index) => (
+        <DividerLine style={{ width: windowWidth * 0.85, alignSelf: 'flex-start', marginTop: '2%', marginBottom: 10 }} color={'#505050'}/>
+      </View>
+      {data.map((item, index) => (
         <Text key={index} style={styles.content}>{item}</Text>
-      ))
-      }
+      ))}
     </View>
   );
 };
@@ -41,11 +33,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     marginLeft: '5%',
-    paddingBottom: 1
+    paddingBottom: 1,
   },
-
   container: {
-    paddingBottom: 10
+    paddingBottom: 10,
   }
 });
 

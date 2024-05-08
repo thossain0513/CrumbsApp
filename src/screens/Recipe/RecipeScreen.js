@@ -9,16 +9,14 @@ const {width, height} = Dimensions.get('window');
 const RecipeScreen = ({ route }) => {
   recipe = route.params.recipe
   const { name, image, ingredients, instructions, cuisine, prepTime, servings } = recipe;
-  const [ingredientsOpen, setIngredientsOpen] = useState(false);
-  const [instructionsOpen, setInstructionsOpen] = useState(false);
 
   return (
       <SafeAreaView style={styles.container}>
         <ScrollView style={styles.scrollContainer}>
           <Image source={{ uri: image }} style={styles.image} />
-          <RecipeDetails name={name} cuisine={cuisine} prepTime={prepTime} servings={servings} />
-          <Accordion title="Ingredients" data={ingredients} />
-          <Accordion title="Instructions" data={instructions} />
+          <RecipeDetails name={name} cuisine={cuisine} prepTime={prepTime} servings={servings} style={styles.details}/>
+          <Accordion title="Ingredients" data={ingredients} alwaysDown={true}/>
+          <Accordion title="Instructions" data={instructions} alwaysDown={true}/>
         </ScrollView>
       </SafeAreaView>
       
@@ -28,24 +26,19 @@ const RecipeScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5E9D9'
+    backgroundColor: '#F5E9D9',
 
   },
   scrollContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#F5E9D9',
     flexDirection: 'flex-start',
     marginHorizontal: '1%',
-    borderWidth: 2,
-    borderColor: 'black',
     overflow: 'hidden',
-    borderRadius: 10
+    paddingTop: '5%'
   },
   image: {
     borderBottomWidth: 2,  
-    borderLeftWidth: 0,
-    borderRightWidth: 0,
-    borderBottomLeftRadius: 10,  // Ensure bottom corners are also rounded
-    borderBottomRightRadius: 10,
+    borderWidth: 2,
     borderColor: 'black',
     borderRadius: 10,
     width: '100%',
@@ -55,8 +48,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center'
   },
   details: {
-    padding: 20,
-    flex: 6,
+    padding: 5,
     flexDirection: 'column',
     position: 'relative'
   },
