@@ -27,14 +27,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5E9D9',
-
   },
   scrollContainer: {
     backgroundColor: '#F5E9D9',
     flexDirection: 'flex-start',
     marginHorizontal: '1%',
     overflow: 'hidden',
-    paddingTop: '5%'
   },
   image: {
     borderBottomWidth: 2,  
