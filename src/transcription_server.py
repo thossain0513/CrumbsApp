@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import whisper
+import os
 
 app = Flask(__name__)
 
@@ -19,12 +20,20 @@ def transcribe_audio():
     audio_path = "/tmp/audio_to_transcribe.wav"
     file.save(audio_path)
 
-    # Use Whisper to transcribe the audio
-    result = model.transcribe(audio_path)
-    transcript = result['text']
+    try:
+        # Use Whisper to transcribe the audio
+        result = model.transcribe(audio_path)
+        transcript = result['text']
 
-    # Return the transcription
-    return jsonify({'transcript': transcript})
+        # Return the transcription
+        return jsonify({'transcript': transcript})
+    finally:
+        # Ensure the file is deleted after processing
+        if os.path.exists(audio_path):
+            os.remove(audio_path)
+            
+        # Return the transcription
+        return jsonify({'transcript': transcript})
 
 if __name__ == '__main__':
     print('app running')
