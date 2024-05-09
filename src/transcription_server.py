@@ -37,8 +37,17 @@ def generate_recipe(ingredients):
     """
     This function will generate a dictionary with the recipe information taking in the input ingredients.
     Each recipe dictionary will have the following:
-        A recipe name: Python string
-        A recipe  
+        { "name": "Name of the Recipe" (Python String), 
+        "description": "A brief description, incorporating the listed ingredients with their quantities" (a string), 
+        "cuisine_type": "Appropriate Cuisine Type" (a string), 
+        "ingredients": ["ingredient", "ingredient"] (a list of strings), 
+        "instructions": ["Step 1: Description with Quantity of Used Ingredient 1", "Step 2: Description with Quantity of Used Ingredient 2"] (a list of strings), 
+        "is_vegetarian": "Yes" if there are no animal-based ingredients/ "No" if there are animal-based ingredients (a string),
+        "prep_time": "prep time (in minutes)" (a string),
+        "servings": servings (integer),
+        "is_vegan": "Yes" if there are only vegan-compliant ingredients/"No" if there are one or more non-vegan ingredients (a string)
+        }
+        Look at the LLM system prompt for more info 
     """
     ...
 
