@@ -26,22 +26,6 @@ export default function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [updatedRecipes, setUpdatedRecipes] = useState([]);
   const [hasRun, setHasRun] = useState(false);
-  const [topHeight, setTopHeight] = useState('60%'); // Initial percentage height for the RecipeCard
-  const screenHeight = Dimensions.get('window').height; // Get the total screen height
-
-  const handleDrag = (deltaY) => {
-    setTopHeight((prevHeightPercentage) => {
-        const prevHeight = parseFloat(prevHeightPercentage.replace('%', ''));
-        const deltaHeight = (deltaY / Dimensions.get('window').height) * 100;
-        let newHeight = prevHeight + deltaHeight;
-
-        // Clamping the new height within bounds
-        newHeight = Math.max(10, Math.min(newHeight, 90));
-        return `${newHeight}%`;
-    });
-  };
-  
-
 
   const recipes = [chickenParmesan, 
     grilledCheese, 
@@ -86,7 +70,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
-            <View style={{ width: '100%', height: topHeight, marginBottom: 10 }}>
+            <View style={{ width: '100%', height: '60%', marginBottom: 10 }}>
                 <RecipeCard item={updatedRecipes[0]} style={{ width: windowWidth, height: '100%' }} animated={true} navigation={navigation} />
             </View>
             <DividerLine style={{ width: windowWidth, alignSelf: 'center'}} color={'#505050'}/>
