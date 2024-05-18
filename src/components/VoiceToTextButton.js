@@ -43,6 +43,7 @@ const VoiceToTextButton = ({ onTranscription }) => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
+            console.log(response.data.transcript);
             onTranscription(response.data.transcript);
         } catch (error) {
             console.error('Error sending audio file:', error);
