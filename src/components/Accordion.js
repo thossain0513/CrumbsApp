@@ -9,7 +9,7 @@ const Accordion = ({ title, data = [] }) => {
     <View style={styles.container}>
       <View style={styles.sectionHeader}>
         <Text style={styles.headerText}>{title}</Text>
-        <DividerLine style={{ width: windowWidth * 0.85, alignSelf: 'flex-start', marginTop: '2%', marginBottom: 10 }} color={'#505050'}/>
+        <DividerLine style={{ width: windowWidth * 0.9, alignSelf: 'flex-start', marginTop: '2%', marginBottom: 10 }} color={'#505050'}/>
       </View>
       {data.map((item, index) => (
         <Text key={index} style={styles.content}>{item}</Text>

@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Image, StyleSheet, TouchableOpacity, Dimensions
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Accordion from '../../components/Accordion';
 import RecipeDetails from '../../components/RecipeDetails';
+import DividerLine from '../../components/DividerLine';
 
 const {width, height} = Dimensions.get('window');
 
@@ -11,14 +12,14 @@ const RecipeScreen = ({ route }) => {
   const { name, image, ingredients, instructions, cuisine, prepTime, servings } = recipe;
 
   return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <ScrollView style={styles.scrollContainer}>
           <Image source={{ uri: image }} style={styles.image} />
           <RecipeDetails name={name} cuisine={cuisine} prepTime={prepTime} servings={servings} style={styles.details}/>
           <Accordion title="Ingredients" data={ingredients} alwaysDown={true}/>
           <Accordion title="Instructions" data={instructions} alwaysDown={true}/>
         </ScrollView>
-      </SafeAreaView>
+      </View>
       
   );
 };
@@ -27,18 +28,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5E9D9',
+    marginTop: 0,
+    paddingTop: '0%'
   },
   scrollContainer: {
     backgroundColor: '#F5E9D9',
     flexDirection: 'flex-start',
-    marginHorizontal: '1%',
-    overflow: 'hidden',
+    marginHorizontal: '0%',
+    overflow: 'hidden'
   },
   image: {
     borderBottomWidth: 2,  
     borderWidth: 2,
     borderColor: 'black',
-    borderRadius: 10,
     width: '100%',
     height: height * 0.35,
     resizeMode: 'cover',

@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, Text, StyleSheet, Dimensions, Animated } from "react-native";
 import HomeScreen from "../screens/Home/HomeScreen";
 import RecipeScreen from "../screens/Recipe/RecipeScreen";
 

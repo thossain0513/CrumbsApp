@@ -70,11 +70,11 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
-            <View style={{ width: '100%', height: '60%', marginBottom: 10 }}>
-                <RecipeCard item={updatedRecipes[0]} style={{ width: windowWidth, height: '100%' }} animated={true} navigation={navigation} />
+            <View style={{ width: '100%', height: '90%', marginBottom: 10 }}>
+                <RecipeCard item={updatedRecipes[0]} style={{ width: windowWidth, height: '100%' }} animated={false} navigation={navigation} />
             </View>
             <DividerLine style={{ width: windowWidth, alignSelf: 'center'}} color={'#505050'}/>
-              <FlatList
+              {/* <FlatList
                 data={updatedRecipes}
                 renderItem={({ item }) => (
                   console.log("rendering non-animated"),
@@ -85,7 +85,7 @@ export default function HomeScreen({ navigation }) {
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
                 contentContainerStyle={styles.flatListContent}
                 numColumns={2}
-              />
+              /> */}
          
               <FooterNav navigation={navigation} />
           </SafeAreaView>

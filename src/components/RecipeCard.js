@@ -1,85 +1,93 @@
 
-import { StyleSheet, Dimensions } from 'react-native';
-import React from 'react'; // Essential for all React components
-import { View, Text, Image, TouchableHighlight, Animated } from 'react-native'; // Standard React Native components
-import AutoAnimatedImage from './AutoAnimatedImage'; // Example path to a custom component
-
+import React from 'react';
+import { StyleSheet, Dimensions, View, Text, ImageBackground, TouchableHighlight } from 'react-native';
+import {LinearGradient} from 'expo-linear-gradient';
+import AutoAnimatedImage from './AutoAnimatedImage';
 
 const { width } = Dimensions.get('window');
 
-
 const RecipeImage = ({ imageUrl }) => (
-<View style={styles.imageContainer}>
-    <Image
-    source={{ uri: imageUrl }}
-    style={styles.image}
-    resizeMode='cover'
-    />
-</View>
+  <ImageBackground source={{ uri: imageUrl }} style={styles.image}>
+    <LinearGradient
+      colors={['transparent', 'rgba(0, 0, 0, 0.8)']}
+      style={styles.gradient}
+    >
+      {/* Gradient covers bottom part of the image */}
+    </LinearGradient>
+  </ImageBackground>
 );
 
 const RecipeText = ({ name }) => (
-<View style={styles.textContainer}>
+  <View style={styles.textContainer}>
     <Text style={styles.text}>{name}</Text>
-</View>
+  </View>
 );
 
-const RecipeCard = ({ item, navigation, style, animated=false }) => {
-imageUrl = item.image || placeholderImage;
-console.log(imageUrl)
+const RecipeCard = ({ item, navigation, style, animated = false }) => {
+  const imageUrl = item.image || placeholderImage;
 
-return (
+  return (
     <TouchableHighlight onPress={() => navigation.navigate('RecipeScreen', { recipe: item })} style={[styles.cardContainer, style]}>
-    <View style={styles.imageTextContainer}>
-        {animated ? <AutoAnimatedImage imageUri={imageUrl} />: <RecipeImage imageUrl={imageUrl}/>}
+      <View style={styles.imageTextContainer}>
+        {animated ? <AutoAnimatedImage imageUri={imageUrl} /> : <RecipeImage imageUrl={imageUrl} />}
         <RecipeText name={item.name} />
-    </View>
+      </View>
     </TouchableHighlight>
-);
+  );
 };
 
-  
-styles =  StyleSheet.create({
-    cardContainer: {
-        flexDirection: 'column',
-        borderRadius: 10,
-        overflow: 'hidden',
-        backgroundColor: 'yellow',
-        minWidth: 100,
-        alignSelf: 'center',
-        width: width * 0.85, // 85% of the screen width for responsiveness
-    },
-    imageTextContainer: {
-        flex: 1,
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    imageContainer: {
-        width: '100%', // Or '100%' depending on container requirements
-        height: '100%', // Or '100%'
-        overflow: 'hidden',
-        justifyContent: 'center',
-        alignItems: 'center',
-    }, // Or any other suitable color,
-    image: {
-        height: '100%',
-        width: '100%',
-        borderRadius: 10,
-    },
-    textContainer: {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        padding: 10,
-        alignItems: "center"
-    },
-    text: {
-        color: 'white',
-        fontSize: 16,
-    },
+const styles = StyleSheet.create({
+  cardContainer: {
+    flexDirection: 'column',
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: 'yellow',
+    minWidth: 100,
+    alignSelf: 'center',
+    width: width * 0.85, // 85% of the screen width for responsiveness
+  },
+  imageTextContainer: {
+    flex: 1,
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+    justifyContent: 'flex-end',
+  },
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '100%', // Cover the bottom 25% of the image
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
+  textContainer: {
+    position: 'absolute',
+    bottom: '15%', // Position text 25% up from the bottom
+    left: 0,
+    right: 0,
+    padding: 10,
+    alignItems: 'center', // Align text to the left
+    justifyContent: 'center',
+  },
+  text: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
 });
 
 export default RecipeCard;
