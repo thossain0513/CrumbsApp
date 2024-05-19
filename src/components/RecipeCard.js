@@ -27,7 +27,7 @@ const RecipeText = ({ name }) => (
 
 const RecipeCard = ({ item, navigation, style, animated = false }) => {
   const imageUrl = item.image || placeholderImage;
-
+console.log(item);
   return (
     <TouchableHighlight onPress={() => navigation.navigate('RecipeScreen', { recipe: item })} style={[styles.cardContainer, style]}>
       <View style={styles.imageTextContainer}>
