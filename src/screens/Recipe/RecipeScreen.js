@@ -9,13 +9,13 @@ const {width, height} = Dimensions.get('window');
 
 const RecipeScreen = ({ route }) => {
   recipe = route.params.recipe
-  const { name, image, ingredients, instructions, cuisine, prepTime, servings } = recipe;
-
+  const { name, image, ingredients, instructions, cuisine, prepTime, servings, description } = recipe;
+  console.log(description);
   return (
       <View style={styles.container}>
         <ScrollView style={styles.scrollContainer}>
           <Image source={{ uri: image }} style={styles.image} />
-          <RecipeDetails name={name} cuisine={cuisine} prepTime={prepTime} servings={servings} style={styles.details}/>
+          <RecipeDetails name={name} cuisine={cuisine} prepTime={prepTime} servings={servings} description={description} style={styles.details}/>
           <Accordion title="Ingredients" data={ingredients} alwaysDown={true}/>
           <Accordion title="Instructions" data={instructions} alwaysDown={true}/>
         </ScrollView>

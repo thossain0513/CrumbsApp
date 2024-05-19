@@ -26,7 +26,7 @@ export default function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [updatedRecipes, setUpdatedRecipes] = useState([]);
   const [hasRun, setHasRun] = useState(false);
-
+  console.log(grilledCheese);
   const recipes = [chickenParmesan, 
     grilledCheese, 
     chickenFajitas, 
@@ -37,23 +37,19 @@ export default function HomeScreen({ navigation }) {
 
      useEffect(() => {
       if (!hasRun) {
-      console.log('Use effect running again'); //logging
       const fetchImages = async () => {
       const updatedRecipesTemp = [];
       for (const recipe of recipes) {
       try {
         //const imgSrc = await generateImage(recipe.name);
-        console.log('image arrived'); //checking if images arrived
         const updatedRecipe = { ...recipe, image: placeholderImage };
         updatedRecipesTemp.push(updatedRecipe);
       } catch (error) {
-        console.error('Error fetching images:', error.message); //logging
         const updatedRecipe = { ...recipe, image: placeholderImage }; 
         updatedRecipesTemp.push(updatedRecipe)
       }
       }
       
-      console.log('got to the end of the loop');
       setUpdatedRecipes(updatedRecipesTemp); 
       setLoading(false);
       setHasRun(true);

@@ -2,6 +2,7 @@
 function createRecipe({
   name,
   ingredients,
+  description,
   instructions,
   cuisine,
   prepTime,
@@ -11,6 +12,7 @@ function createRecipe({
   return {
     name,
     ingredients,
+    description,
     instructions,
     cuisine,
     prepTime,

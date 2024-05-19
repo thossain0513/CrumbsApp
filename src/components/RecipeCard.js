@@ -3,13 +3,15 @@ import React from 'react';
 import { StyleSheet, Dimensions, View, Text, ImageBackground, TouchableHighlight } from 'react-native';
 import {LinearGradient} from 'expo-linear-gradient';
 import AutoAnimatedImage from './AutoAnimatedImage';
+import AppLoading from 'expo-app-loading';
+import { useFonts } from 'expo-font';
 
 const { width } = Dimensions.get('window');
 
 const RecipeImage = ({ imageUrl }) => (
   <ImageBackground source={{ uri: imageUrl }} style={styles.image}>
     <LinearGradient
-      colors={['transparent', 'rgba(0, 0, 0, 0.8)']}
+      colors={['transparent', 'rgba(0, 0, 0, 0.95)']}
       style={styles.gradient}
     >
       {/* Gradient covers bottom part of the image */}
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     position: 'absolute',
-    bottom: '15%', // Position text 25% up from the bottom
+    bottom: '5%', // Position text 25% up from the bottom
     left: 0,
     right: 0,
     padding: 10,
@@ -85,8 +87,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: 'white',
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 30,
+    fontWeight: 'regular',
+    fontFamily: 'Roboto'
   },
 });
 

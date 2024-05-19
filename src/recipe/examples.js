@@ -3,6 +3,7 @@ import createRecipe from './Recipe'
 export const chickenParmesan = createRecipe({
 name: 'Chicken Parmesan',
 ingredients: ['chicken breasts', 'tomato sauce', 'mozzarella cheese', 'basil'],
+description: "Bro it's just a chicken parmesan",
 instructions: [
     'Preheat oven to 400°F', 
     'Bread chicken with breadcrumbs', 
@@ -14,6 +15,7 @@ servings: 4
 
 export const grilledCheese = createRecipe({
     name: 'Grilled Cheese',
+    description: "bro it's just a grilled cheese",
     ingredients: ['bread', 'cheese'],
     instructions: [
         'Butter bread', 
@@ -27,6 +29,7 @@ export const grilledCheese = createRecipe({
 export const chickenFajitas = createRecipe({
     name: 'Chicken Fajitas',
     ingredients: ['chicken breasts', 'bell peppers', 'onions', 'tortillas'],
+    description: "Bro it's just chicken fajitas",
     instructions: [
       'Marinate chicken',
       'Saute onions and bell peppers',
@@ -41,6 +44,7 @@ export const chickenFajitas = createRecipe({
   export const roastedVegetables = createRecipe({
     name: 'Roasted Vegetables',
     ingredients: ['carrots', 'broccoli', 'sweet potatoes'],
+    description: "Bro it's just roasted vegetables",
     instructions: ['Toss with oil and seasoning', 'Roast in oven'],
     cuisine: "White People Food",
     prepTime: "25 minutes",
@@ -49,6 +53,7 @@ export const chickenFajitas = createRecipe({
 
   export const chocolateCake = createRecipe({
     name: 'Chocolate Cake',
+    description: "Bro it's just chocolate cake",
     ingredients: ['flour', 'sugar', 'eggs', 'chocolate'],
     instructions: [
       'Preheat oven',
@@ -62,6 +67,7 @@ export const chickenFajitas = createRecipe({
 
   export const chickenTikkaMasala = createRecipe({
     name: 'Chicken Tikka Masala',
+    description: "Bro it's just indian food",
     ingredients: ['chicken breasts', 'yogurt', 'spices', 'basmati rice'],
     instructions: [
       'Marinate chicken',
