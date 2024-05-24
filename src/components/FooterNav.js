@@ -28,7 +28,7 @@ const FooterNav = ({ navigation, style }) => {
     } catch (error) {
         console.error('Error generating recipe:', error);
     }
-};
+}
 
   const onTranscription = async (transcription) => {
     console.log('Transcription received:', transcription);

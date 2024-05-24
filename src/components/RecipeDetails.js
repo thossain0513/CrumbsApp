@@ -16,7 +16,7 @@ const RecipeDetails = ({ name, cuisine, prepTime, servings, description }) => {
       <Text style={styles.subtitle}>{cuisine}</Text>
       <Text style={styles.description}>{description}</Text>
       <View style={styles.info}>
-        <Text style={styles.infoText}>Prep Time: {prepTime} mins</Text>
+        <Text style={styles.infoText}>Prep Time: {prepTime}</Text>
         <Text style={styles.infoText}>Servings: {servings}</Text>
       </View>
     </View>
