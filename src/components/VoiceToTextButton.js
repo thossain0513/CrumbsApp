@@ -38,12 +38,11 @@ const VoiceToTextButton = ({ onTranscription }) => {
         });
 
         try {
-            const response = await axios.post('http://10.0.0.5:8080/transcribe', formData, {
+            const response = await axios.post('http://10.0.0.5:8000/transcribe', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(response.data.transcript);
             onTranscription(response.data.transcript);
         } catch (error) {
             console.error('Error sending audio file:', error);

@@ -66,8 +66,8 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : (
           <SafeAreaView style={styles.container}>
-            <View style={{ width: '100%', height: '90%', marginBottom: 10 }}>
-                <RecipeCard item={updatedRecipes[0]} style={{ width: windowWidth, height: '100%' }} animated={false} navigation={navigation} />
+            <View style={{ width: '100%', height: '55%', marginBottom: 10 }}>
+                <RecipeCard item={updatedRecipes[1]} style={{ width: windowWidth, height: '100%' }} animated={false} navigation={navigation} />
             </View>
             <DividerLine style={{ width: windowWidth, alignSelf: 'center'}} color={'#505050'}/>
               {/* <FlatList
