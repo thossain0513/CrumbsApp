@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, View } from 'react-native';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 
 const VoiceToTextButton = ({ onTranscription }) => {
     const [recording, setRecording] = useState(null);
-    console.log("got called");
+    const hasSpokenRef = useRef(false);
+    const silenceTimeoutRef = useRef(null);
 
     const startRecording = async () => {
         const { status } = await Audio.requestPermissionsAsync();
@@ -18,23 +19,51 @@ const VoiceToTextButton = ({ onTranscription }) => {
 
         const recording = new Audio.Recording();
         await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
+
+        recording.setOnRecordingStatusUpdate((status) => {
+            console.log(`metering: ${status.metering}`);
+
+            if (status.metering > -20) { // Adjust the threshold as necessary
+                console.log('speaking');
+                hasSpokenRef.current = true;
+                console.log(`Spoken: ${hasSpokenRef.current}`);
+                if (silenceTimeoutRef.current) {
+                    clearTimeout(silenceTimeoutRef.current);
+                    silenceTimeoutRef.current = null;
+                }
+            } else if (hasSpokenRef.current) {
+                console.log('spoken');
+                if (!silenceTimeoutRef.current) {
+                    console.log('Metering below threshold:', status.metering);
+                    silenceTimeoutRef.current = setTimeout(() => {
+                        stopRecording(recording);
+                    }, 2000); // 2 seconds of silence
+                }
+            }
+        });
+
         await recording.startAsync();
         setRecording(recording);
+        hasSpokenRef.current = false; // Reset hasSpokenRef when starting a new recording
     };
 
-    const stopRecording = async () => {
+    const stopRecording = async (recording) => {
+        if (!recording) return;
+        clearTimeout(silenceTimeoutRef.current);
+        silenceTimeoutRef.current = null;
         await recording.stopAndUnloadAsync();
         const uri = recording.getURI();
         setRecording(null);
+        hasSpokenRef.current = false; // Reset hasSpokenRef after stopping the recording
         sendAudio(uri);
     };
 
     const sendAudio = async (uri) => {
         const formData = new FormData();
         formData.append('file', {
-          uri,
-          type: 'audio/wav',
-          name: 'speech.wav'
+            uri,
+            type: 'audio/wav',
+            name: 'speech.wav'
         });
 
         try {
@@ -53,7 +82,7 @@ const VoiceToTextButton = ({ onTranscription }) => {
         <View>
             <Button
                 title={recording ? 'Stop Recording' : 'Start Recording'}
-                onPress={recording ? stopRecording : startRecording}
+                onPress={recording ? () => stopRecording(recording) : startRecording}
             />
         </View>
     );
