@@ -21,20 +21,15 @@ const VoiceToTextButton = ({ onTranscription }) => {
         await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
 
         recording.setOnRecordingStatusUpdate((status) => {
-            console.log(`metering: ${status.metering}`);
 
             if (status.metering > -20) { // Adjust the threshold as necessary
-                console.log('speaking');
                 hasSpokenRef.current = true;
-                console.log(`Spoken: ${hasSpokenRef.current}`);
                 if (silenceTimeoutRef.current) {
                     clearTimeout(silenceTimeoutRef.current);
                     silenceTimeoutRef.current = null;
                 }
             } else if (hasSpokenRef.current) {
-                console.log('spoken');
                 if (!silenceTimeoutRef.current) {
-                    console.log('Metering below threshold:', status.metering);
                     silenceTimeoutRef.current = setTimeout(() => {
                         stopRecording(recording);
                     }, 2000); // 2 seconds of silence

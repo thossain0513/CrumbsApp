@@ -1,25 +1,45 @@
+// api.js
+import axios from 'axios';
 
-async function generateImage(prompt) {
-  try {
-    const options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `prompt=${encodeURIComponent(prompt)}&size=small`,
-    };
-
-    const response = await fetch("https://dalle-api-3856df7c1545.herokuapp.com/openai/generateimage", options);
-    const result = await response.json();
-
-    if (response.ok) {
-      return result.data;
-    } else {
-      throw new Error(result.error || "Failed to fetch data");
+export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false) => {
+    try {
+        console.log('Sending request to generate recipes');
+        const response = await axios.post('http://10.0.0.5:8000/generate_recipe', {
+            ingredients,
+            is_vegetarian: isVegetarian,
+            is_vegan: isVegan
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('Received response:', response.data);
+        return response.data; // Return the list of recipes
+    } catch (error) {
+        console.error('Error generating recipes:', error);
+        throw error;
     }
-  } catch (error) {
-    throw new Error(error.message || "An error occurred");
-  }
-}
+};
 
-export default generateImage;
+export const fetchImage = async (recipeName, recipeDescription) => {
+    try {
+        const response = await axios.post('http://10.0.0.5:8000/generate_image', {
+            recipeName,
+            recipeDescription,
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        console.log('Image response:', response.data);
+        if (response.data && response.data.length > 0) {
+            return response.data[0]; // Return the first image URL
+        } else {
+            console.error('Invalid image response structure:', response.data);
+            throw new Error('Invalid image response structure');
+        }
+    } catch (error) {
+        console.error('Error fetching image:', error);
+        throw error;
+    }
+};
