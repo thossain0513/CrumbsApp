@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, ActivityIndicator, StyleSheet, Dimensions, Text, Button } from 'react-native';
-import { fetchRecipes, fetchImage } from '../../helpers'; // Adjust the import path as necessary
+import { fetchRecipes, fetchImage } from '../../helpers'; // Adjust the import path to ../../helpers
 import Accordion from '../../components/Accordion';
 import RecipeDetails from '../../components/RecipeDetails';
 
@@ -8,26 +8,29 @@ const { width, height } = Dimensions.get('window');
 
 const RecipeScreen = ({ route }) => {
   const [recipes, setRecipes] = useState([]);
+  const [images, setImages] = useState([]);
   const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
-  const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const ingredients = route.params?.ingredients;
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        setLoading(true);
+        let fetchedRecipes = [];
         if (ingredients) {
-          const fetchedRecipes = await fetchRecipes(ingredients);
-          setRecipes(fetchedRecipes);
-          setCurrentRecipeIndex(0);
-          const fetchedImage = await fetchImage(fetchedRecipes[0].name, fetchedRecipes[0].description);
-          setImage(fetchedImage);
+          fetchedRecipes = await fetchRecipes(ingredients);
         } else if (route.params?.recipe) {
-          setRecipes([route.params.recipe]);
-          setCurrentRecipeIndex(0);
-          const fetchedImage = await fetchImage(route.params.recipe.name, route.params.recipe.description);
-          setImage(fetchedImage);
+          fetchedRecipes = [route.params.recipe];
         }
+
+        const fetchedImages = await Promise.all(
+          fetchedRecipes.map(recipe => fetchImage(recipe.name, recipe.description))
+        );
+
+        setRecipes(fetchedRecipes);
+        setImages(fetchedImages);
+        setCurrentRecipeIndex(0);
       } catch (error) {
         console.error('Error loading data:', error);
       } finally {
@@ -38,18 +41,16 @@ const RecipeScreen = ({ route }) => {
     loadData();
   }, [ingredients]);
 
-  const handleNextRecipe = async () => {
-    const newIndex = (currentRecipeIndex + 1) % recipes.length;
-    setCurrentRecipeIndex(newIndex);
-    const fetchedImage = await fetchImage(recipes[newIndex].name, recipes[newIndex].description);
-    setImage(fetchedImage);
+  const handleNextRecipe = () => {
+    if (currentRecipeIndex < recipes.length - 1) {
+      setCurrentRecipeIndex(currentRecipeIndex + 1);
+    }
   };
 
-  const handlePreviousRecipe = async () => {
-    const newIndex = (currentRecipeIndex - 1 + recipes.length) % recipes.length;
-    setCurrentRecipeIndex(newIndex);
-    const fetchedImage = await fetchImage(recipes[newIndex].name, recipes[newIndex].description);
-    setImage(fetchedImage);
+  const handlePreviousRecipe = () => {
+    if (currentRecipeIndex > 0) {
+      setCurrentRecipeIndex(currentRecipeIndex - 1);
+    }
   };
 
   if (loading) {
@@ -69,13 +70,13 @@ const RecipeScreen = ({ route }) => {
   }
 
   const currentRecipe = recipes[currentRecipeIndex];
+  const currentImage = images[currentRecipeIndex];
   const { name, ingredients: recipeIngredients, instructions, cuisine, prepTime, servings, description } = currentRecipe;
-  console.log(`${name}, ${description}`);
 
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer}>
-        <Image source={{ uri: image }} style={styles.image} />
+        <Image source={{ uri: currentImage }} style={styles.image} />
         <RecipeDetails
           name={name}
           cuisine={cuisine}
@@ -88,8 +89,8 @@ const RecipeScreen = ({ route }) => {
         <Accordion title="Instructions" data={instructions} alwaysDown={true} />
       </ScrollView>
       <View style={styles.navigationButtons}>
-        <Button title="Previous" onPress={handlePreviousRecipe} disabled={recipes.length <= 1} />
-        <Button title="Next" onPress={handleNextRecipe} disabled={recipes.length <= 1} />
+        <Button title="Previous" onPress={handlePreviousRecipe} disabled={currentRecipeIndex === 0} />
+        <Button title="Next" onPress={handleNextRecipe} disabled={currentRecipeIndex === recipes.length - 1} />
       </View>
     </View>
   );
