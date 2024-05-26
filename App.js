@@ -1,8 +1,9 @@
+import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Navigation from './src/navigation/navigation';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
-
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -10,7 +11,7 @@ export default function App() {
   useEffect(() => {
     async function loadResourcesAndDataAsync() {
       try {
-        // Load fonts
+        await SplashScreen.preventAutoHideAsync();
         await Font.loadAsync({
           'Roboto': require('./assets/fonts/Roboto/Roboto-Light.ttf'),
         });
@@ -26,10 +27,12 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded) {
-    return null; // Render nothing while the font is loading
+    return null;
   }
+
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Navigation />
+    </GestureHandlerRootView>
   );
 }
-

@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Image, ActivityIndicator, StyleSheet, Dimensions, Text, Button } from 'react-native';
-import { fetchRecipes, fetchImage } from '../../helpers'; // Adjust the import path to ../../helpers
+import { fetchRecipes, fetchImage } from '../../helpers'; // Adjust the import path to '../../helpers'
 import Accordion from '../../components/Accordion';
 import RecipeDetails from '../../components/RecipeDetails';
+import Carousel from 'react-native-reanimated-carousel';
+import { useSharedValue } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get('window');
 
 const RecipeScreen = ({ route }) => {
   const [recipes, setRecipes] = useState([]);
   const [images, setImages] = useState([]);
-  const [currentRecipeIndex, setCurrentRecipeIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const progress = useSharedValue(0);
+  const carouselRef = useRef(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const ingredients = route.params?.ingredients;
 
   useEffect(() => {
@@ -30,7 +34,6 @@ const RecipeScreen = ({ route }) => {
 
         setRecipes(fetchedRecipes);
         setImages(fetchedImages);
-        setCurrentRecipeIndex(0);
       } catch (error) {
         console.error('Error loading data:', error);
       } finally {
@@ -42,15 +45,19 @@ const RecipeScreen = ({ route }) => {
   }, [ingredients]);
 
   const handleNextRecipe = () => {
-    if (currentRecipeIndex < recipes.length - 1) {
-      setCurrentRecipeIndex(currentRecipeIndex + 1);
+    if (carouselRef.current && currentIndex < recipes.length - 1) {
+      carouselRef.current.next();
     }
   };
 
   const handlePreviousRecipe = () => {
-    if (currentRecipeIndex > 0) {
-      setCurrentRecipeIndex(currentRecipeIndex - 1);
+    if (carouselRef.current && currentIndex > 0) {
+      carouselRef.current.prev();
     }
+  };
+
+  const onSnapToItem = (index) => {
+    setCurrentIndex(index);
   };
 
   if (loading) {
@@ -69,29 +76,42 @@ const RecipeScreen = ({ route }) => {
     );
   }
 
-  const currentRecipe = recipes[currentRecipeIndex];
-  const currentImage = images[currentRecipeIndex];
-  const { name, ingredients: recipeIngredients, instructions, cuisine, prepTime, servings, description } = currentRecipe;
+  const renderRecipe = ({ item, index }) => {
+    const { name, ingredients: recipeIngredients, instructions, cuisine, prepTime, servings, description } = item;
+    return (
+      <View style={styles.card}>
+        <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContentContainer}>
+          <Image source={{ uri: images[index] }} style={styles.image} />
+          <RecipeDetails
+            name={name}
+            cuisine={cuisine}
+            prepTime={prepTime}
+            servings={servings}
+            description={description}
+            style={styles.details}
+          />
+          <Accordion title="Ingredients" data={recipeIngredients} alwaysDown={true} />
+          <Accordion title="Instructions" data={instructions} alwaysDown={true} />
+          <View style={styles.navigationButtons}>
+            <Button title="Previous" onPress={handlePreviousRecipe} disabled={index === 0} />
+            <Button title="Next" onPress={handleNextRecipe} disabled={index === recipes.length - 1} />
+          </View>
+        </ScrollView>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContainer}>
-        <Image source={{ uri: currentImage }} style={styles.image} />
-        <RecipeDetails
-          name={name}
-          cuisine={cuisine}
-          prepTime={prepTime}
-          servings={servings}
-          description={description}
-          style={styles.details}
-        />
-        <Accordion title="Ingredients" data={recipeIngredients} alwaysDown={true} />
-        <Accordion title="Instructions" data={instructions} alwaysDown={true} />
-      </ScrollView>
-      <View style={styles.navigationButtons}>
-        <Button title="Previous" onPress={handlePreviousRecipe} disabled={currentRecipeIndex === 0} />
-        <Button title="Next" onPress={handleNextRecipe} disabled={currentRecipeIndex === recipes.length - 1} />
-      </View>
+      <Carousel
+        ref={carouselRef}
+        data={recipes}
+        renderItem={renderRecipe}
+        width={width}
+        height={height}
+        onSnapToItem={onSnapToItem}
+        loop={false}  // Disable looping to prevent circular navigation
+      />
     </View>
   );
 };
@@ -100,15 +120,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5E9D9',
-    marginTop: 0,
-    paddingTop: '0%',
+  },
+  card: {
+    flex: 1,
+    marginBottom: '20%'
   },
   scrollContainer: {
     backgroundColor: '#F5E9D9',
-    flexDirection: 'flex-start',
-    marginHorizontal: '0%',
-    overflow: 'hidden',
-    marginBottom: '5%',
+    flex: 1,
+  },
+  scrollContentContainer: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    paddingBottom: 50, // Ensure space for navigation buttons
   },
   image: {
     borderBottomWidth: 2,
@@ -124,37 +148,6 @@ const styles = StyleSheet.create({
     padding: 5,
     flexDirection: 'column',
     position: 'relative',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 18,
-    color: 'gray',
-    marginVertical: 5,
-  },
-  info: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    marginTop: 10,
-  },
-  infoText: {
-    fontSize: 16,
-    color: 'black',
-  },
-  sectionHeader: {
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  content: {
-    fontSize: 16,
-    lineHeight: 24,
   },
   loadingContainer: {
     flex: 1,
@@ -174,6 +167,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 10,
+    backgroundColor: '#F5E9D9',
+    borderTopWidth: 1,
+    borderColor: 'gray',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
 
