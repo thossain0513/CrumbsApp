@@ -5,7 +5,7 @@ const { width } = Dimensions.get('window');
 const inputMargin = width * 0.0075; // 2% of the width
 
 const OtpScreen = ({ navigation }) => {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(Array(6).fill(''));
   const inputs = useRef([]);
 
   const handleChange = (value, index) => {
@@ -22,12 +22,15 @@ const OtpScreen = ({ navigation }) => {
     const key = e.nativeEvent.key;
 
     if (key === 'Backspace') {
-      if (index > 0) {
+      const newOtp = [...otp];
+      if (otp[index] !== '') {
+        newOtp[index] = '';
+        setOtp(newOtp);
+      } else if (index > 0) {
+        newOtp[index - 1] = '';
+        setOtp(newOtp);
         inputs.current[index - 1].focus();
       }
-      const newOtp = [...otp];
-      newOtp[index] = '';
-      setOtp(newOtp);
     }
   };
 
@@ -50,38 +53,40 @@ const OtpScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={{ flex: 1 }}
     >
       <View style={styles.container}>
         <Text style={styles.goBack} onPress={() => navigation.goBack()}>Go back</Text>
-        <Text style={styles.title}>Sign in</Text>
-        <Text style={styles.subtitle}>We have sent SMS with code to +48 123 456 789</Text>
-        <View style={styles.otpContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              keyboardType="numeric"
-              maxLength={1}
-              onChangeText={(value) => handleChange(value, index)}
-              onKeyPress={(e) => handleKeyPress(e, index)}
-              onFocus={() => handleFocus(index)}
-              onBlur={handleBlur}
-              value={digit}
-              ref={(ref) => (inputs.current[index] = ref)}
-              style={styles.otpInput}
-              caretHidden={true} // Hide the blinking cursor
-            />
-          ))}
+        <View style={styles.contentContainer}>
+          <Text style={styles.title}>Sign in</Text>
+          <Text style={styles.subtitle}>We have sent SMS with code to +48 123 456 789</Text>
+          <View style={styles.otpContainer}>
+            {otp.map((digit, index) => (
+              <TextInput
+                key={index}
+                keyboardType="numeric"
+                maxLength={1}
+                onChangeText={(value) => handleChange(value, index)}
+                onKeyPress={(e) => handleKeyPress(e, index)}
+                onFocus={() => handleFocus(index)}
+                onBlur={handleBlur}
+                value={digit}
+                ref={(ref) => (inputs.current[index] = ref)}
+                style={styles.otpInput}
+                caretHidden={true} // Hide the blinking cursor
+              />
+            ))}
+          </View>
+          <View style={styles.resendContainer}>
+            <Text style={styles.resendText}>You haven't received the code?</Text>
+            <Text style={styles.resendButton} onPress={handleResend}>Resend!</Text>
+          </View>
+          <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Sign up</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.resendContainer}>
-          <Text style={styles.resendText}>You haven't received the code?</Text>
-          <Text style={styles.resendButton} onPress={handleResend}>Resend!</Text>
-        </View>
-        <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
-          <Text style={styles.buttonText}>Sign up</Text>
-        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -91,34 +96,39 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f5e1d3',
-    justifyContent: 'center',
+    backgroundColor: '#F5E9D9',
     alignItems: 'center',
     position: 'relative', // Ensure relative positioning
   },
   goBack: {
     position: 'absolute', // Absolute positioning
-    top: '7%', // Adjust as needed
+    top: '10%', // Adjust as needed
     left: '7%', // Adjust as needed
     fontSize: 16,
     color: '#6c757d',
+    zIndex: 1, // Ensure it is above other elements
+  },
+  contentContainer: {
+    marginTop: 60, // Adjust as needed to position below the goBack button
+    width: '100%',
+    alignItems: 'center',
   },
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginVertical: '5%',
   },
   subtitle: {
     fontSize: 16,
     color: '#6c757d',
     textAlign: 'center',
-    marginBottom: 20,
+    marginVertical: '5%',
   },
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: '5%',
   },
   otpInput: {
     borderWidth: 1,
