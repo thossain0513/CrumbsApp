@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
       />
       <Button
         title="Signup with a Phone Number"
-        onPress={() => navigation.navigate('OtpScreen')}
+        onPress={() => navigation.navigate('PhoneNumberScreen')}
       />
       {message ? <Text style={styles.message}>{message}</Text> : null}
     </View>

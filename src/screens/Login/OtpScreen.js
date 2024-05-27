@@ -4,9 +4,10 @@ import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform
 const { width } = Dimensions.get('window');
 const inputMargin = width * 0.0075; // Adjust margin as needed
 
-const OtpScreen = ({ navigation }) => {
+const OtpScreen = ({ navigation, route }) => {
   const [otp, setOtp] = useState(Array(6).fill(''));
   const inputs = useRef([]);
+  const { phoneNumber } = route.params;
 
   const handleChange = (value, index) => {
     // Check if all preceding boxes are filled
@@ -69,7 +70,7 @@ const OtpScreen = ({ navigation }) => {
         <Text style={styles.goBack} onPress={() => navigation.goBack()}>Go back</Text>
         <View style={styles.contentContainer}>
           <Text style={styles.title}>Sign in</Text>
-          <Text style={styles.subtitle}>We have sent SMS with code to +48 123 456 789</Text>
+          <Text style={styles.subtitle}>We have sent SMS with code to {phoneNumber}</Text>
           <View style={styles.otpContainer}>
             {otp.map((digit, index) => (
               <TextInput
