@@ -2,13 +2,21 @@ import React, { useRef, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
-const inputMargin = width * 0.0075; // 2% of the width
+const inputMargin = width * 0.0075; // Adjust margin as needed
 
 const OtpScreen = ({ navigation }) => {
   const [otp, setOtp] = useState(Array(6).fill(''));
   const inputs = useRef([]);
 
   const handleChange = (value, index) => {
+    // Check if all preceding boxes are filled
+    for (let i = 0; i < index; i++) {
+      if (otp[i] === '') {
+        inputs.current[i].focus();
+        return;
+      }
+    }
+
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
