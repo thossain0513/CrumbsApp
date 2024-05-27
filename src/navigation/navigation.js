@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/Home/HomeScreen";
 import RecipeScreen from "../screens/Recipe/RecipeScreen";
+import LoginScreen from '../screens/Login/LoginScreen';
+import OtpScreen from '../screens/Login/OtpScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,8 +37,10 @@ function MyStack() {
             }),
           }}
         >
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
             <Stack.Screen name="RecipeScreen" component={RecipeScreen} />
+            <Stack.Screen name="LoginScreen" component={LoginScreen} />
+            <Stack.Screen name="OtpScreen" component={OtpScreen} />
         </Stack.Navigator>
     );
 }

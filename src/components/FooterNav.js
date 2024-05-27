@@ -14,9 +14,9 @@ const FooterNav = ({ navigation, style }) => {
 
     return (
       <View style={[styles.footer, style]}>
-          <Button title="Home" onPress={() => navigation.navigate('Home')} />
+          <Button title="Home" onPress={() => navigation.navigate('HomeScreen')} />
           <VoiceToTextButton onTranscription={onTranscription} />
-          <Button title="Profile" onPress={() => navigation.navigate('Profile')} />
+          <Button title="Profile" onPress={() => navigation.navigate('LoginScreen')} />
           {/* Add more buttons as needed, pointing to different parts of the app */}
       </View>
     );
