@@ -9,51 +9,127 @@ import PhoneNumberScreen from '../screens/Login/PhoneNumberScreen';
 
 const Stack = createNativeStackNavigator();
 
-// Define the stack navigator in a separate function
-function MyStack() {
-    return (
-        <Stack.Navigator
-          screenOptions={{
-            headerShown: false,
-            presentation: 'modal',
-            gestureEnabled: true,
-            cardOverlayEnabled: true,
-            cardStyleInterpolator: ({ current, layouts }) => ({
-              cardStyle: {
-                transform: [
-                  {
-                    translateY: current.progress.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [layouts.screen.height, 0],
-                    }),
-                  },
-                ],
-              },
-              overlayStyle: {
-                opacity: current.progress.interpolate({
-                  inputRange: [0, 0.5, 1],
-                  outputRange: [0, 0.5, 0.5],  // Fades in to 50% opacity, stays until fully opened
+// Bottom to top animation
+const bottomToTopAnimation = ({ current, layouts }) => ({
+    cardStyle: {
+        transform: [
+            {
+                translateY: current.progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [layouts.screen.height, 0],
                 }),
-              },
-            }),
-          }}
-        >
-            <Stack.Screen name="HomeScreen" component={HomeScreen} />
-            <Stack.Screen name="RecipeScreen" component={RecipeScreen} />
-            <Stack.Screen name="LoginScreen" component={LoginScreen} />
-            <Stack.Screen name="PhoneNumberScreen" component={PhoneNumberScreen} />
-            <Stack.Screen name="OtpScreen" component={OtpScreen} />
+            },
+        ],
+    },
+    overlayStyle: {
+        opacity: current.progress.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: [0, 0.5, 0.5],
+        }),
+    },
+});
+
+// Horizontal animation
+const horizontalAnimation = ({ current, layouts }) => ({
+    cardStyle: {
+        transform: [
+            {
+                translateX: current.progress.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [layouts.screen.width, 0],
+                }),
+            },
+        ],
+    },
+    overlayStyle: {
+        opacity: current.progress.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 0.5],
+        }),
+    },
+});
+
+// Login Stack Navigator for LoginScreen, PhoneNumberScreen, and OtpScreen
+function LoginStackNavigator() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen 
+                name="LoginScreen" 
+                component={LoginScreen} 
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    cardOverlayEnabled: true,
+                    cardStyleInterpolator: horizontalAnimation,
+                }} 
+            />
+            <Stack.Screen 
+                name="PhoneNumberScreen" 
+                component={PhoneNumberScreen} 
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    cardOverlayEnabled: true,
+                    cardStyleInterpolator: horizontalAnimation,
+                }} 
+            />
+            <Stack.Screen 
+                name="OtpScreen" 
+                component={OtpScreen} 
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    cardOverlayEnabled: true,
+                    cardStyleInterpolator: horizontalAnimation,
+                }} 
+            />
         </Stack.Navigator>
     );
 }
 
-// Main navigation component
-export default function Navigation() {
-  return (
-    <NavigationContainer>
-        <MyStack />
-    </NavigationContainer>
-  );
+// Main Stack Navigator
+function MyStack() {
+    return (
+        <Stack.Navigator>
+            <Stack.Screen 
+                name="HomeScreen" 
+                component={HomeScreen} 
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    cardOverlayEnabled: true,
+                    cardStyleInterpolator: bottomToTopAnimation,
+                }} 
+            />
+            <Stack.Screen 
+                name="RecipeScreen" 
+                component={RecipeScreen} 
+                options={{
+                    headerShown: false,
+                    presentation: 'modal',
+                    gestureEnabled: true,
+                    cardOverlayEnabled: true,
+                    cardStyleInterpolator: bottomToTopAnimation,
+                }} 
+            />
+            <Stack.Screen 
+                name="LoginStack" 
+                component={LoginStackNavigator} 
+                options={{
+                    headerShown: false,
+                    gestureEnabled: true,
+                    cardOverlayEnabled: true,
+                    presentation: 'modal', // Ensures the LoginStack is presented as a modal
+                }} 
+            />
+        </Stack.Navigator>
+    );
 }
 
-// Since StyleSheet is not used for navigation options, you can use it for other styling purposes in this file.
+export default function Navigation() {
+    return (
+        <NavigationContainer>
+            <MyStack />
+        </NavigationContainer>
+    );
+}
