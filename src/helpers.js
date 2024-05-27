@@ -1,6 +1,6 @@
 // api.js
 import axios from 'axios';
-export const localIP = "10.0.0.5"
+export const localIP = "10.0.0.5" //change this to your local IP address, find it on your terminal, ask ChatGPT how to find it in your terminal
 
 export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false) => {
     try {
