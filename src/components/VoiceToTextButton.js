@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button, View } from 'react-native';
 import { Audio } from 'expo-av';
 import axios from 'axios';
+import { sendAudio } from '../helpers';
 
 const VoiceToTextButton = ({ onTranscription }) => {
     const [recording, setRecording] = useState(null);
@@ -50,27 +51,7 @@ const VoiceToTextButton = ({ onTranscription }) => {
         const uri = recording.getURI();
         setRecording(null);
         hasSpokenRef.current = false; // Reset hasSpokenRef after stopping the recording
-        sendAudio(uri);
-    };
-
-    const sendAudio = async (uri) => {
-        const formData = new FormData();
-        formData.append('file', {
-            uri,
-            type: 'audio/wav',
-            name: 'speech.wav'
-        });
-
-        try {
-            const response = await axios.post('http://10.0.0.5:8000/transcribe', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            onTranscription(response.data.transcript);
-        } catch (error) {
-            console.error('Error sending audio file:', error);
-        }
+        sendAudio(uri, onTranscription);
     };
 
     return (

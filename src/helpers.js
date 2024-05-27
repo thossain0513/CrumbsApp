@@ -1,10 +1,11 @@
 // api.js
 import axios from 'axios';
+export const localIP = "10.0.0.5"
 
 export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false) => {
     try {
         console.log('Sending request to generate recipes');
-        const response = await axios.post('http://10.0.0.5:8000/generate_recipe', {
+        const response = await axios.post(`http://${localIP}:8000/generate_recipe`, {
             ingredients,
             is_vegetarian: isVegetarian,
             is_vegan: isVegan
@@ -23,7 +24,7 @@ export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = 
 
 export const fetchImage = async (recipeName, recipeDescription) => {
     try {
-        const response = await axios.post('http://10.0.0.5:8000/generate_image', {
+        const response = await axios.post(`http://${localIP}:8000/generate_image`, {
             recipeName,
             recipeDescription,
         }, {
@@ -43,3 +44,24 @@ export const fetchImage = async (recipeName, recipeDescription) => {
         throw error;
     }
 };
+
+export const sendAudio = async (uri, onTranscription) => {
+    const formData = new FormData();
+    formData.append('file', {
+      uri,
+      type: 'audio/wav',
+      name: 'speech.wav'
+    });
+  
+    try {
+      const response = await axios.post(`http://${localIP}:8000/transcribe`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      onTranscription(response.data.transcript);
+    } catch (error) {
+      console.error('Error sending audio file:', error);
+    }
+  };
+  
