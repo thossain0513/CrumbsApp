@@ -74,7 +74,7 @@ Make sure you have the Expo Go app downloaded on your phone and make an account.
     ```bash
     ipconfig getifaddr en0
 
-Once you find your local IP address, navigate to the `helpers.js` file and then input that in for the appropriate IP address variable.
+Once you find your local IP address, navigate to the `helpers.js` file and then input that in for the appropriate IP address variable. Only after that can you run the following command.
 
 4. **Build and Activate the Expo App**
    ```bash
