@@ -32,30 +32,30 @@ Download node.js from the official website to be able to run npm commands on you
 
 Make sure you have the Expo Go app downloaded on your phone and make an account. Download it from the App store or the Play Store.
 
-Make sure you have expo and node package manager installed on your local machine:
+**If you don't have Expo or Node Package Manager**:
     ```bash
     npm install -g npm
     npm install expo-cli -g
 
-If you have permission issues, run with the following:
+**If you have permission issues, run with the following**:
     ```bash
     sudo npm install -g npm
     sudo npm install expo-cli -g
 
 ### How to Activate the API
 
-Make sure you have poetry installed in your local machine. If you don't, run the following command:
+**To install Poetry and Pipe it to Python**:
     ```bash
     curl -sSL https://install.python-poetry.org | python3 -
 
 
-Clone the API repository:
+**Clone the API repository**:
     ```bash
     git clone https://github.com/thossain0513/crumbs-api.git
     cd api-code
 
 
-Run the following command when you're in the api-code directory to activate the API. This is crucial for ensuring that the generate recipe feature works for the application:
+**Run the Following**
     ```bash
     poetry run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
@@ -76,7 +76,7 @@ If this is your first time running the application, run the following command in
    ```bash
    npx expo start
 
-Navigate to the `helpers.js` file and change the local IP address variable to your local IP address. To find your local IP address, run the following command:
+**To find your local IP address**:
     ```bash
     ipconfig getifaddr en0
 
