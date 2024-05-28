@@ -4,8 +4,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/Home/HomeScreen";
 import RecipeScreen from "../screens/Recipe/RecipeScreen";
 import LoginScreen from '../screens/Login/LoginScreen';
-import OtpScreen from '../screens/Login/OtpScreen';
-import PhoneNumberScreen from '../screens/Login/PhoneNumberScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,26 +54,6 @@ function LoginStackNavigator() {
             <Stack.Screen 
                 name="LoginScreen" 
                 component={LoginScreen} 
-                options={{
-                    headerShown: false,
-                    gestureEnabled: true,
-                    cardOverlayEnabled: true,
-                    cardStyleInterpolator: horizontalAnimation,
-                }} 
-            />
-            <Stack.Screen 
-                name="PhoneNumberScreen" 
-                component={PhoneNumberScreen} 
-                options={{
-                    headerShown: false,
-                    gestureEnabled: true,
-                    cardOverlayEnabled: true,
-                    cardStyleInterpolator: horizontalAnimation,
-                }} 
-            />
-            <Stack.Screen 
-                name="OtpScreen" 
-                component={OtpScreen} 
                 options={{
                     headerShown: false,
                     gestureEnabled: true,
