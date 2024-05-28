@@ -1,16 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect} from 'react';
 import { View, Button, Text, Image, TouchableHighlight, FlatList, ActivityIndicator, Dimensions, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { tw } from 'nativewind';
-import generateImage from '../../helpers';
 import { chickenParmesan, grilledCheese, chickenFajitas, roastedVegetables, chocolateCake, chickenTikkaMasala } from '../../recipe/examples'
-import AutoAnimatedImage from '../../components/AutoAnimatedImage';
 import FooterNav from '../../components/FooterNav';
 import DividerLine from '../../components/DividerLine';
 import RecipeCard from '../../components/RecipeCard';
-import DraggableDivider from '../../components/DraggableDivider';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 const placeholderImage = 'https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png';
 const { width, height } = Dimensions.get('window');
