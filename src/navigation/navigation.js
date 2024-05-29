@@ -1,113 +1,84 @@
-import React from 'react';
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeScreen from "../screens/Home/HomeScreen";
-import RecipeScreen from "../screens/Recipe/RecipeScreen";
+import React, { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from '../screens/Home/HomeScreen';
+import RecipeScreen from '../screens/Recipe/RecipeScreen';
 import LoginScreen from '../screens/Login/LoginScreen';
+import SignupScreen from '../screens/Login/SignupScreen';
+import SplashScreen from '../screens/Login/SplashScreen';
+import { AuthProvider, AuthContext } from '../auth_utils/AuthContext';
 
 const Stack = createNativeStackNavigator();
 
-// Bottom to top animation
-const bottomToTopAnimation = ({ current, layouts }) => ({
-    cardStyle: {
-        transform: [
-            {
-                translateY: current.progress.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [layouts.screen.height, 0],
-                }),
-            },
-        ],
-    },
-    overlayStyle: {
-        opacity: current.progress.interpolate({
-            inputRange: [0, 0.5, 1],
-            outputRange: [0, 0.5, 0.5],
-        }),
-    },
-});
-
-// Horizontal animation
-const horizontalAnimation = ({ current, layouts }) => ({
-    cardStyle: {
-        transform: [
-            {
-                translateX: current.progress.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: [layouts.screen.width, 0],
-                }),
-            },
-        ],
-    },
-    overlayStyle: {
-        opacity: current.progress.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 0.5],
-        }),
-    },
-});
-
-// Login Stack Navigator for LoginScreen, PhoneNumberScreen, and OtpScreen
-function LoginStackNavigator() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen 
-                name="LoginScreen" 
-                component={LoginScreen} 
-                options={{
-                    headerShown: false,
-                    gestureEnabled: true,
-                    cardOverlayEnabled: true,
-                    cardStyleInterpolator: horizontalAnimation,
-                }} 
-            />
-        </Stack.Navigator>
-    );
+function AuthStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SignupScreen"
+        component={SignupScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
 }
 
-// Main Stack Navigator
-function MyStack() {
-    return (
-        <Stack.Navigator>
-            <Stack.Screen 
-                name="HomeScreen" 
-                component={HomeScreen} 
-                options={{
-                    headerShown: false,
-                    gestureEnabled: true,
-                    cardOverlayEnabled: true,
-                    cardStyleInterpolator: bottomToTopAnimation,
-                }} 
-            />
-            <Stack.Screen 
-                name="RecipeScreen" 
-                component={RecipeScreen} 
-                options={{
-                    headerShown: false,
-                    presentation: 'modal',
-                    gestureEnabled: true,
-                    cardOverlayEnabled: true,
-                    cardStyleInterpolator: bottomToTopAnimation,
-                }} 
-            />
-            <Stack.Screen 
-                name="LoginStack" 
-                component={LoginStackNavigator} 
-                options={{
-                    headerShown: false,
-                    gestureEnabled: true,
-                    cardOverlayEnabled: true,
-                    presentation: 'modal', // Ensures the LoginStack is presented as a modal
-                }} 
-            />
-        </Stack.Navigator>
-    );
+function HomeStack() {
+  return (
+    <Stack.Navigator initialRouteName="HomeScreen">
+      <Stack.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RecipeScreen"
+        component={RecipeScreen}
+        options={{ headerShown: false, presentation: 'modal' }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function RootNavigator() {
+  const { user, isLoading } = useContext(AuthContext);
+  console.log('user status: ', user);
+
+  return (
+    <Stack.Navigator>
+      {isLoading ? (
+        <Stack.Screen
+          name="SplashScreen"
+          component={SplashScreen}
+          options={{ headerShown: false }}
+        />
+      ) : user ? (
+        <Stack.Screen
+          name="Home"
+          component={HomeStack}
+          options={{ headerShown: false }}
+        />
+      ) : (
+        <Stack.Screen
+          name="Auth"
+          component={AuthStack}
+          options={{ headerShown: false }}
+        />
+      )}
+    </Stack.Navigator>
+  );
 }
 
 export default function Navigation() {
-    return (
-        <NavigationContainer>
-            <MyStack />
-        </NavigationContainer>
-    );
+  return (
+    <AuthProvider>
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </AuthProvider>
+  );
 }

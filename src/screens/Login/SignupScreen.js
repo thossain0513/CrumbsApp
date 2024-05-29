@@ -1,29 +1,37 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { signIn } from '../../auth_utils/auth';
+import { signUp, signIn } from '../../auth_utils/auth';
 
-const LoginScreen = ({ navigation }) => {
+const SignupScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleSignIn = async () => {
-    const { user, error } = await signIn(email, password);
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setMessage('Passwords do not match.');
+      return;
+    }
+
+    const { user, error } = await signUp(email, password);
     if (error) {
       setMessage(error.message);
-      console.log(error.message);
     } else {
-      setMessage('Sign-in successful!');
-      console.log('Sign-in successful!');
-      // Navigate to the next screen or do something after a successful login
-      navigation.navigate('Home');
+      setMessage('Sign-up successful! Logging in...');
+      const { user: signInUser, error: signInError } = await signIn(email, password);
+      if (signInError) {
+        setMessage(signInError.message);
+      } else {
+        navigation.navigate('Home');
+      }
     }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
+      <Text style={styles.title}>Sign Up</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -39,14 +47,18 @@ const LoginScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign In" onPress={handleSignIn} />
-      <Button
-        title="Switch to Sign Up"
-        onPress={() => navigation.navigate('SignupScreen')}
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        placeholderTextColor="rgba(0,0,0,0.5)"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
       />
+      <Button title="Sign Up" onPress={handleSignUp} />
       <Button
-        title="Signup with a Phone Number"
-        onPress={() => navigation.navigate('PhoneNumberScreen')}
+        title="Back to Sign In"
+        onPress={() => navigation.navigate('LoginScreen')}
       />
       {message ? <Text style={styles.message}>{message}</Text> : null}
     </View>
@@ -78,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignupScreen;
