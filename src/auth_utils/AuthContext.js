@@ -11,9 +11,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkUser = async () => {
-      const session = await supabase.auth.getSession();
-      if (session.data.session) {
-        setUser(session.data.session.user);
+      const userData = await AsyncStorage.getItem('user');
+      if (userData) {
+        setUser(JSON.parse(userData));
       }
       setIsLoading(false);
     };

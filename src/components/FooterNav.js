@@ -2,9 +2,8 @@
 import styles from "./styles";
 import { View, Button} from 'react-native';
 import VoiceToTextButton from './VoiceToTextButton'
-import axios from 'axios';
-import createRecipe from "../recipe/Recipe";
-
+import LogoutButton
+ from "./LogoutButton";
 const FooterNav = ({ navigation, style }) => {
 
   const onTranscription = async (transcription) => {
@@ -16,7 +15,7 @@ const FooterNav = ({ navigation, style }) => {
       <View style={[styles.footer, style]}>
           <Button title="Home" onPress={() => navigation.navigate('HomeScreen')} />
           <VoiceToTextButton onTranscription={onTranscription} />
-          <Button title="Profile" onPress={() => navigation.navigate('LoginStack')} />
+          <LogoutButton />
           {/* Add more buttons as needed, pointing to different parts of the app */}
       </View>
     );

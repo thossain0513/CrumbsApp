@@ -23,7 +23,10 @@ const SignupScreen = ({ navigation }) => {
       if (signInError) {
         setMessage(signInError.message);
       } else {
-        navigation.navigate('Home');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'HomeScreen' }],
+        });
       }
     }
   };

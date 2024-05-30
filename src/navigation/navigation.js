@@ -11,8 +11,9 @@ import { AuthProvider, AuthContext } from '../auth_utils/AuthContext';
 const Stack = createNativeStackNavigator();
 
 function AuthStack() {
+  console.log("in auth stack");
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="LoginScreen">
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}

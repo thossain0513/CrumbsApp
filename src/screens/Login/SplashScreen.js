@@ -9,9 +9,9 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     if (!isLoading) {
       if (user) {
-        navigation.navigate('HomeScreen');
+        navigation.replace('HomeScreen');
       } else {
-        navigation.navigate('LoginStack');
+        navigation.replace('LoginStack');
       }
     }
   }, [isLoading, user, navigation]);
