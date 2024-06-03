@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+// LoginScreen.js
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { signIn } from '../../auth_utils/auth';
+import { AuthContext } from '../../auth_utils/AuthContext'; // Import AuthContext
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const { signIn } = useContext(AuthContext); // Use AuthContext
 
   const handleSignIn = async () => {
     const { user, error } = await signIn(email, password);
@@ -15,41 +17,41 @@ const LoginScreen = ({ navigation }) => {
     } else {
       setMessage('Sign-in successful!');
       console.log('Sign-in successful!');
-      // Navigate to the next screen or do something after a successful login
-      navigation.navigate('Home');
+      // Navigate to the home screen after a successful login
+      navigation.navigate('HomeScreen');
     }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign In</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="rgba(0,0,0,0.5)"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="rgba(0,0,0,0.5)"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <Button title="Sign In" onPress={handleSignIn} />
-      <Button
-        title="Switch to Sign Up"
-        onPress={() => navigation.navigate('SignupScreen')}
-      />
-      <Button
-        title="Signup with a Phone Number"
-        onPress={() => navigation.navigate('PhoneNumberScreen')}
-      />
-      {message ? <Text style={styles.message}>{message}</Text> : null}
-    </View>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign In</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="rgba(0,0,0,0.5)"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="rgba(0,0,0,0.5)"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+        <Button title="Sign In" onPress={handleSignIn} />
+        <Button
+          title="Switch to Sign Up"
+          onPress={() => navigation.navigate('SignupScreen')}
+        />
+        <Button
+          title="Signup with a Phone Number"
+          onPress={() => navigation.navigate('PhoneNumberScreen')}
+        />
+        {message ? <Text style={styles.message}>{message}</Text> : null}
+      </View>
     </TouchableWithoutFeedback>
   );
 };

@@ -1,6 +1,8 @@
 // api.js
 import axios from 'axios';
-export const localIP = "10.0.0.7" //change this to your local IP address, find it on your terminal, ask ChatGPT how to find it in your terminal
+import * as FileSystem from 'expo-file-system';
+
+export const localIP = "10.0.0.5" //change this to your local IP address, find it on your terminal, ask ChatGPT how to find it in your terminal
 
 export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false) => {
     try {
@@ -65,3 +67,31 @@ export const sendAudio = async (uri, onTranscription) => {
     }
   };
   
+  export const sendPhotoToAPI = async (photoUri) => {
+    console.log('sending photo');
+
+    try {
+        // Convert the photo URI to a base64 string
+        const base64 = await FileSystem.readAsStringAsync(photoUri, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+
+        // Construct the payload
+        const payload = {
+            file: `data:image/jpeg;base64,${base64}`, // Adjust MIME type if necessary
+        };
+        console.log(payload.file);
+
+        // Send the payload to the API
+        const response = await axios.post(`http://${localIP}:8000/analyze`, payload, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        console.log(response.data); // Handle the API response
+
+        // Delete the photo from device after successfully sending it to the API
+        await FileSystem.deleteAsync(photoUri);
+    } catch (error) {
+        console.error(error);
+    }
+};

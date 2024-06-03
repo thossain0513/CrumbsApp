@@ -7,6 +7,7 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import SignupScreen from '../screens/Login/SignupScreen';
 import SplashScreen from '../screens/Login/SplashScreen';
 import { AuthProvider, AuthContext } from '../auth_utils/AuthContext';
+import CameraScreen from '../screens/Camera/CameraScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,11 @@ function HomeStack() {
         name="RecipeScreen"
         component={RecipeScreen}
         options={{ headerShown: false, presentation: 'modal' }}
+      />
+      <Stack.Screen
+        name="CameraScreen"
+        component={CameraScreen}
+        options={{ headerShown: false}}
       />
     </Stack.Navigator>
   );
