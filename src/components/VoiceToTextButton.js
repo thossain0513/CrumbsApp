@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Button, View } from 'react-native';
 import { Audio } from 'expo-av';
-import axios from 'axios';
 import { sendAudio } from '../helpers';
 
 const VoiceToTextButton = ({ onTranscription }) => {
@@ -22,7 +21,6 @@ const VoiceToTextButton = ({ onTranscription }) => {
         await recording.prepareToRecordAsync(Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY);
 
         recording.setOnRecordingStatusUpdate((status) => {
-
             if (status.metering > -20) { // Adjust the threshold as necessary
                 hasSpokenRef.current = true;
                 if (silenceTimeoutRef.current) {
@@ -33,7 +31,7 @@ const VoiceToTextButton = ({ onTranscription }) => {
                 if (!silenceTimeoutRef.current) {
                     silenceTimeoutRef.current = setTimeout(() => {
                         stopRecording(recording);
-                    }, 2000); // 2 seconds of silence
+                    }, 1000); // 1 second of silence
                 }
             }
         });
