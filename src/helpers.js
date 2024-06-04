@@ -67,30 +67,24 @@ export const sendAudio = async (uri, onTranscription) => {
     }
   };
   
-  export const sendPhotoToAPI = async (photoUri) => {
+  export const sendPhotoToAPI = async (navigation, base64) => {
     console.log('sending photo');
 
     try {
-        // Convert the photo URI to a base64 string
-        const base64 = await FileSystem.readAsStringAsync(photoUri, {
-            encoding: FileSystem.EncodingType.Base64,
-        });
 
         // Construct the payload
         const payload = {
             file: `data:image/jpeg;base64,${base64}`, // Adjust MIME type if necessary
         };
-        console.log(payload.file);
 
         // Send the payload to the API
         const response = await axios.post(`http://${localIP}:8000/analyze`, payload, {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        console.log(response.data); // Handle the API response
+        console.log(`response.data: ${response.data.ingredients[0]}`); // Handle the API response
+        navigation.navigate('RecipeScreen', { ingredients: response.data.ingredients[0] });
 
-        // Delete the photo from device after successfully sending it to the API
-        await FileSystem.deleteAsync(photoUri);
     } catch (error) {
         console.error(error);
     }
