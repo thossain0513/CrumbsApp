@@ -67,7 +67,7 @@ export const sendAudio = async (uri, onTranscription) => {
     }
   };
   
-  export const sendPhotoToAPI = async (navigation, base64) => {
+  export const sendPhotoToAPI = async (base64) => {
     console.log('sending photo');
 
     try {
@@ -83,7 +83,7 @@ export const sendAudio = async (uri, onTranscription) => {
         });
 
         console.log(`response.data: ${response.data.ingredients[0]}`); // Handle the API response
-        navigation.navigate('RecipeScreen', { ingredients: response.data.ingredients[0] });
+        return response.data.ingredients[0];
 
     } catch (error) {
         console.error(error);

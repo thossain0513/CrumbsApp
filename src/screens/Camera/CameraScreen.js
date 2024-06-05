@@ -5,7 +5,7 @@ import { sendPhotoToAPI } from '../../helpers';
 import supabase from '../../auth_utils/supabaseClient';
 
 
-export default function CameraScreen(navigation) {
+export default function CameraScreen ({ navigation })  {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
@@ -42,9 +42,11 @@ export default function CameraScreen(navigation) {
     });
     console.log('took photo');
     const { base64, uri } = photo;
-    sendPhotoToAPI(navigation, base64);
-  };
-
+    ing = await sendPhotoToAPI(base64);
+    if (ing) {
+      navigation.navigate('RecipeScreen', { ingredients: ing });
+    }
+  }
   if (!permission) {
     return <View />;
   }
@@ -86,9 +88,6 @@ export default function CameraScreen(navigation) {
         photo={true}
       >
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-            <Text style={styles.text}>Flip Camera</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={takePicture}>
             <Text style={styles.text}>Take Photo</Text>
           </TouchableOpacity>
@@ -97,6 +96,7 @@ export default function CameraScreen(navigation) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -121,5 +121,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
-  },
+  }
 });
