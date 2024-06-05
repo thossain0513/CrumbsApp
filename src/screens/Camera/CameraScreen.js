@@ -8,6 +8,7 @@ import supabase from '../../auth_utils/supabaseClient';
 export default function CameraScreen ({ navigation })  {
   const [facing, setFacing] = useState('back');
   const [permission, requestPermission] = useCameraPermissions();
+  const [isProcessing, setIsProcessing] = useState(false);
   const cameraRef = useRef(null);
 
   const uploadPhoto = async (photo) => {
@@ -36,17 +37,24 @@ export default function CameraScreen ({ navigation })  {
   };
   
   const takeAndUploadPhoto = async () => {
-    const photo = await cameraRef.current.takePictureAsync({
-      quality: 1,
-      base64: true
-    });
-    console.log('took photo');
-    const { base64, uri } = photo;
-    ing = await sendPhotoToAPI(base64);
-    if (ing) {
-      navigation.navigate('RecipeScreen', { ingredients: ing });
+    try {
+      setIsProcessing(true);
+      const photo = await cameraRef.current.takePictureAsync({
+        quality: 1,
+        base64: true
+      });
+      console.log('took photo');
+      const { base64, uri } = photo;
+      const ing = await sendPhotoToAPI(base64);
+      if (ing) {
+        navigation.navigate('RecipeScreen', { ingredients: ing });
+      }
+    } catch (error) {
+      console.error('Error taking or uploading photo:', error);
+    } finally {
+      setIsProcessing(false);
     }
-  }
+  };
   if (!permission) {
     return <View />;
   }
@@ -65,7 +73,7 @@ export default function CameraScreen ({ navigation })  {
   }
 
   const takePicture = async () => {
-    if (cameraRef.current) {
+    if (cameraRef.current && !isProcessing) {
     takeAndUploadPhoto();
 
     console.log(`photo ingredients: ${ing}`);
