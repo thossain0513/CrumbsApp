@@ -11,38 +11,38 @@ const { width, height } = Dimensions.get('window');
 const RecipeScreen = ({ route }) => {
   const [recipes, setRecipes] = useState([]);
   const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(route.params?.isLoading || false);
+  const [error, setError] = useState(route.params?.error || null);
   const progress = useSharedValue(0);
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const ingredients = route.params?.ingredients;
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
-        let fetchedRecipes = [];
-        if (ingredients) {
-          fetchedRecipes = await fetchRecipes(ingredients);
-        } else if (route.params?.recipe) {
-          fetchedRecipes = [route.params.recipe];
-        }
-
-        const fetchedImages = await Promise.all(
-          fetchedRecipes.map(recipe => fetchImage(recipe.name, recipe.description))
-        );
-
-        setRecipes(fetchedRecipes);
-        setImages(fetchedImages);
-      } catch (error) {
-        console.error('Error loading data:', error);
-      } finally {
+    if (loading && ingredients) {
+      if (ingredients.trim() === '') {
+        setError('Failed to generate recipe');
         setLoading(false);
+      } else {
+        const loadData = async () => {
+          try {
+            const fetchedRecipes = await fetchRecipes(ingredients);
+            const fetchedImages = await Promise.all(
+              fetchedRecipes.map(recipe => fetchImage(recipe.name, recipe.description))
+            );
+            setRecipes(fetchedRecipes);
+            setImages(fetchedImages);
+          } catch (error) {
+            console.error('Error loading data:', error);
+            setError('Failed to generate recipe');
+          } finally {
+            setLoading(false);
+          }
+        };
+        loadData();
       }
-    };
-
-    loadData();
-  }, [ingredients]);
+    }
+  }, [ingredients, loading]);
 
   const handleNextRecipe = () => {
     if (carouselRef.current && currentIndex < recipes.length - 1) {
@@ -64,6 +64,14 @@ const RecipeScreen = ({ route }) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
     );
   }

@@ -83,7 +83,15 @@ export const sendAudio = async (uri, onTranscription) => {
         });
 
         console.log(`response.data: ${response.data.ingredients[0]}`); // Handle the API response
-        return response.data.ingredients[0];
+        if (response.data.ingredients[0] === undefined) {
+            console.log('returning empty')
+            return ' ';
+        }
+          
+        x = response.data.ingredients[0].split(", ,");
+        x = x.join(', ');
+        console.log(`response.data processed: ${x}`);
+        return x;
 
     } catch (error) {
         console.error(error);
