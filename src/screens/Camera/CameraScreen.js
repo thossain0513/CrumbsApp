@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera'; // Correct import for the camera
 import { sendPhotoToAPI } from '../../helpers';
+import FooterNav from '../../components/FooterNav';
 
 export default function CameraScreen({ navigation }) {
   const [permission, requestPermission] = useCameraPermissions();
@@ -70,6 +71,7 @@ export default function CameraScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </CameraView>
+      <FooterNav navigation={navigation}/>
     </View>
   );
 }
@@ -78,6 +80,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    position: 'relative',
+    flexDirection: 'column'
   },
   camera: {
     flex: 1,
@@ -92,6 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
+    marginBottom: '20%'
   },
   text: {
     fontSize: 24,

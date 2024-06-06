@@ -11,7 +11,7 @@ const styles= StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         alignContent: 'center',
-        backgroundColor: '#eee',
+        backgroundColor: '#333333',
         width: '100%',
         height: '10%'
     },

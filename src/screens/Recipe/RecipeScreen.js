@@ -11,25 +11,30 @@ const { width, height } = Dimensions.get('window');
 const RecipeScreen = ({ route }) => {
   const [recipes, setRecipes] = useState(route.params?.recipe ? [route.params.recipe] : []);
   const [images, setImages] = useState(route.params?.recipe && route.params.recipe.image ? [route.params.recipe.image] : []);
-  const [loading, setLoading] = useState(route.params?.isLoading || false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(route.params?.error || null);
   const [isFromCamera, setIsFromCamera] = useState(route.params?.isFromCamera || false);
   const progress = useSharedValue(0);
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageLoading, setImageLoading] = useState(true);
   const ingredients = route.params?.ingredients;
   const recipe = route.params?.recipe;
-console.log(`isFromCamera: ${isFromCamera}`)
+  console.log(`isFromCamera: ${isFromCamera}`);
+
   useEffect(() => {
-    if (recipe) {
-      // If a recipe is provided directly, set it without fetching
-      setLoading(false);
-    } else if (ingredients) {
-      if (ingredients.trim() === '') {
-        setError('Failed to generate recipe');
+    const loadData = async () => {
+      if (recipe) {
+        setRecipes([recipe]);
+        setImages([recipe.image]);
         setLoading(false);
-      } else {
-        const loadData = async () => {
+        setImageLoading(false);
+      } else if (ingredients) {
+        if (ingredients.trim() === '') {
+          setError('Failed to generate recipe');
+          setLoading(false);
+          setImageLoading(false);
+        } else {
           try {
             const fetchedRecipes = await fetchRecipes(ingredients);
             const fetchedImages = await Promise.all(
@@ -38,20 +43,24 @@ console.log(`isFromCamera: ${isFromCamera}`)
             setRecipes(fetchedRecipes);
             setImages(fetchedImages);
             setLoading(false);
+            setImageLoading(false);
           } catch (error) {
             console.error('Error loading data:', error);
             setError('Failed to generate recipe');
             setLoading(false);
+            setImageLoading(false);
           }
-        };
-        loadData();
+        }
+      } else if (isFromCamera) {
+        setLoading(true);
+        setImageLoading(true);
+      } else {
+        setLoading(false);
+        setError('No recipe or ingredients provided');
+        setImageLoading(false);
       }
-    } else if (isFromCamera) {
-      setLoading(true); // Ensure we remain in the loading state if data is still being processed
-    } else {
-      setLoading(false);
-      setError('No recipe or ingredients provided');
-    }
+    };
+    loadData();
   }, [ingredients, recipe, isFromCamera]);
 
   const handleNextRecipe = () => {
@@ -99,7 +108,17 @@ console.log(`isFromCamera: ${isFromCamera}`)
     return (
       <View style={styles.card}>
         <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContentContainer}>
-          <Image source={{ uri: images[index] }} style={styles.image} />
+          <View style={styles.imageContainer}>
+            {imageLoading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+              <Image 
+                source={{ uri: images[index] }} 
+                style={styles.image} 
+                onLoad={() => setImageLoading(false)}
+              />
+            )}
+          </View>
           <RecipeDetails
             name={name}
             cuisine={cuisine}
@@ -128,7 +147,7 @@ console.log(`isFromCamera: ${isFromCamera}`)
         width={width}
         height={height}
         onSnapToItem={onSnapToItem}
-        loop={false}  // Disable looping to prevent circular navigation
+        loop={false} // Disable looping to prevent circular navigation
       />
     </View>
   );
@@ -141,7 +160,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    marginBottom: '20%'
+    marginBottom: '20%',
   },
   scrollContainer: {
     backgroundColor: '#F5E9D9',
@@ -152,15 +171,19 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     paddingBottom: 50, // Ensure space for navigation buttons
   },
-  image: {
+  imageContainer: {
+    width: '100%',
+    height: height * 0.35,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderBottomWidth: 2,
     borderWidth: 2,
     borderColor: 'black',
+  },
+  image: {
     width: '100%',
-    height: height * 0.35,
+    height: '100%',
     resizeMode: 'cover',
-    justifyContent: 'center',
-    alignSelf: 'center',
   },
   details: {
     padding: 5,
@@ -196,3 +219,4 @@ const styles = StyleSheet.create({
 });
 
 export default RecipeScreen;
+
