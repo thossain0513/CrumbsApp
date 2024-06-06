@@ -9,17 +9,22 @@ import { useSharedValue } from 'react-native-reanimated';
 const { width, height } = Dimensions.get('window');
 
 const RecipeScreen = ({ route }) => {
-  const [recipes, setRecipes] = useState([]);
-  const [images, setImages] = useState([]);
+  const [recipes, setRecipes] = useState(route.params?.recipe ? [route.params.recipe] : []);
+  const [images, setImages] = useState(route.params?.recipe && route.params.recipe.image ? [route.params.recipe.image] : []);
   const [loading, setLoading] = useState(route.params?.isLoading || false);
   const [error, setError] = useState(route.params?.error || null);
+  const [isFromCamera, setIsFromCamera] = useState(route.params?.isFromCamera || false);
   const progress = useSharedValue(0);
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const ingredients = route.params?.ingredients;
-
+  const recipe = route.params?.recipe;
+console.log(`isFromCamera: ${isFromCamera}`)
   useEffect(() => {
-    if (loading && ingredients) {
+    if (recipe) {
+      // If a recipe is provided directly, set it without fetching
+      setLoading(false);
+    } else if (ingredients) {
       if (ingredients.trim() === '') {
         setError('Failed to generate recipe');
         setLoading(false);
@@ -32,17 +37,22 @@ const RecipeScreen = ({ route }) => {
             );
             setRecipes(fetchedRecipes);
             setImages(fetchedImages);
+            setLoading(false);
           } catch (error) {
             console.error('Error loading data:', error);
             setError('Failed to generate recipe');
-          } finally {
             setLoading(false);
           }
         };
         loadData();
       }
+    } else if (isFromCamera) {
+      setLoading(true); // Ensure we remain in the loading state if data is still being processed
+    } else {
+      setLoading(false);
+      setError('No recipe or ingredients provided');
     }
-  }, [ingredients, loading]);
+  }, [ingredients, recipe, isFromCamera]);
 
   const handleNextRecipe = () => {
     if (carouselRef.current && currentIndex < recipes.length - 1) {

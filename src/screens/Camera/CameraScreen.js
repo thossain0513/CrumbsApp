@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, View, Button, TouchableOpacity } from 'react-native';
-import { CameraView, useCameraPermissions } from 'expo-camera'; // Use the correct import for the camera
+import { CameraView, useCameraPermissions } from 'expo-camera'; // Correct import for the camera
 import { sendPhotoToAPI } from '../../helpers';
 
 export default function CameraScreen({ navigation }) {
@@ -19,19 +19,19 @@ export default function CameraScreen({ navigation }) {
       const { base64 } = photo;
 
       // Navigate to RecipeScreen with loading state
-      navigation.navigate('RecipeScreen', { isLoading: true });
+      navigation.navigate('RecipeScreen', { isLoading: true, isFromCamera: true });
 
       const ing = await sendPhotoToAPI(base64);
-      if (ing) {
+      if (ing && ing.trim() !== ' ') {
         // Navigate to RecipeScreen with the fetched ingredients
-        navigation.navigate('RecipeScreen', { ingredients: ing, isLoading: false });
+        navigation.navigate('RecipeScreen', { ingredients: ing, isLoading: false, isFromCamera: true });
       } else {
         // Navigate to RecipeScreen with an error flag
-        navigation.navigate('RecipeScreen', { isLoading: false, error: 'Failed to generate recipe' });
+        navigation.navigate('RecipeScreen', { isLoading: false, error: 'Failed to generate recipe', isFromCamera: true });
       }
     } catch (error) {
       console.error('Error taking or uploading photo:', error);
-      navigation.navigate('RecipeScreen', { isLoading: false, error: 'Failed to generate recipe' });
+      navigation.navigate('RecipeScreen', { isLoading: false, error: 'Failed to generate recipe', isFromCamera: true });
     } finally {
       setIsProcessing(false);
     }

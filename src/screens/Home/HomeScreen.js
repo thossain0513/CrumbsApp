@@ -53,7 +53,7 @@ export default function HomeScreen({ navigation }) {
       fetchImages();
       }
       }, [hasRun]);
-
+      console.log(updatedRecipes);
       return (
         loading ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -62,7 +62,7 @@ export default function HomeScreen({ navigation }) {
         ) : (
           <SafeAreaView style={styles.container}>
             <View style={{ width: '100%', height: '80%', marginBottom: 10 }}>
-                <RecipeCard item={updatedRecipes[1]} style={{ width: windowWidth, height: '100%' }} animated={false} navigation={navigation} />
+                <RecipeCard recipe={updatedRecipes[1]} style={{ width: windowWidth, height: '100%' }} animated={false} navigation={navigation} />
             </View>
             <DividerLine style={{ width: windowWidth, alignSelf: 'center'}} color={'#505050'}/>
               {/* <FlatList

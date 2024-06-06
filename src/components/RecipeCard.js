@@ -7,6 +7,7 @@ import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 
 const { width } = Dimensions.get('window');
+const placeholderImage = 'https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png';
 
 const RecipeImage = ({ imageUrl }) => (
   <ImageBackground source={{ uri: imageUrl }} style={styles.image}>
@@ -25,14 +26,13 @@ const RecipeText = ({ name }) => (
   </View>
 );
 
-const RecipeCard = ({ item, navigation, style, animated = false }) => {
-  const imageUrl = item.image || placeholderImage;
-console.log(item);
+const RecipeCard = ({ recipe, navigation, style, animated = false }) => {
+  const imageUrl = recipe.image || placeholderImage;
   return (
-    <TouchableHighlight onPress={() => navigation.navigate('RecipeScreen', { recipe: item })} style={[styles.cardContainer, style]}>
+    <TouchableHighlight onPress={() => navigation.navigate('RecipeScreen', { recipe: recipe })} style={[styles.cardContainer, style]}>
       <View style={styles.imageTextContainer}>
         {animated ? <AutoAnimatedImage imageUri={imageUrl} /> : <RecipeImage imageUrl={imageUrl} />}
-        <RecipeText name={item.name} />
+        <RecipeText name={recipe.name} />
       </View>
     </TouchableHighlight>
   );
