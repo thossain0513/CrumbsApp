@@ -1,6 +1,5 @@
 // api.js
 import axios from 'axios';
-import * as FileSystem from 'expo-file-system';
 
 export const localIP = "10.0.0.5" //change this to your local IP address, find it on your terminal, ask ChatGPT how to find it in your terminal
 
@@ -83,6 +82,8 @@ export const sendAudio = async (uri, onTranscription) => {
         });
 
         console.log(`response.data: ${response.data.ingredients[0]}`); // Handle the API response
+        console.log(`response.data before dicing: ${response.data.ingredients}`); // Handle the API response
+
         if (response.data.ingredients[0] === undefined) {
             console.log('returning empty')
             return ' ';

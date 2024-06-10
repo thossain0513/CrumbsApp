@@ -60,6 +60,7 @@ const RecipeScreen = ({ route }) => {
         setImageLoading(false);
       }
     };
+    
     loadData();
   }, [ingredients, recipe, isFromCamera]);
 
