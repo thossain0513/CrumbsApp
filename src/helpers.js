@@ -43,29 +43,6 @@ export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = 
     }
   };
 
-export const fetchImage = async (recipeName, recipeDescription) => {
-    try {
-        const response = await axios.post(`http://${localIP}:8000/generate_image`, {
-            recipeName,
-            recipeDescription,
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        console.log('Image response:', response.data);
-        if (response.data && response.data.length > 0) {
-            return response.data[0]; // Return the first image URL
-        } else {
-            console.error('Invalid image response structure:', response.data);
-            throw new Error('Invalid image response structure');
-        }
-    } catch (error) {
-        console.error('Error fetching image:', error);
-        throw error;
-    }
-};
-
 export const sendAudio = async (uri, onTranscription) => {
     const formData = new FormData();
     formData.append('file', {
@@ -75,7 +52,7 @@ export const sendAudio = async (uri, onTranscription) => {
     });
   
     try {
-      const response = await axios.post(`http://${localIP}:8000/transcribe`, formData, {
+      const response = await axios.post(`http://${localIP}:8000/audio/transcribe`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
