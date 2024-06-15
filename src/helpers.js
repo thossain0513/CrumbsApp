@@ -3,25 +3,45 @@ import axios from 'axios';
 
 export const localIP = "10.0.0.5" //change this to your local IP address, find it on your terminal, ask ChatGPT how to find it in your terminal
 
-export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false) => {
-    try {
-        console.log('Sending request to generate recipes');
-        const response = await axios.post(`http://${localIP}:8000/generate_recipe`, {
-            ingredients,
-            is_vegetarian: isVegetarian,
-            is_vegan: isVegan
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-        console.log('Received response:', response.data);
-        return response.data; // Return the list of recipes
-    } catch (error) {
-        console.error('Error generating recipes:', error);
-        throw error;
-    }
+
+const seedrandom = require('seedrandom');
+
+const getRandomIndices = (num_recipes) => {
+  const seed = Math.floor(Math.random() * 1000000);
+  const random = seedrandom(seed.toString());
+
+  const indices = Array.from({ length: 1000 }, (_, i) => i);
+
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+
+  return indices.slice(0, num_recipes);
 };
+
+const generateRecipe = async (ingredients, isVegetarian = false, isVegan = false, index) => {
+    const response = await axios.post(`http://${localIP}:8000/generate_single_recipe?index=${index}`, {
+      ingredients: ingredients,
+      is_vegetarian: isVegetarian,
+      is_vegan: isVegan
+    });
+    return response.data;
+  };
+
+export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false, num_recipes = 3) => {
+    const randomIndices = getRandomIndices(num_recipes);
+    try {
+      const recipes = await Promise.all(
+        randomIndices.map((index) =>
+        generateRecipe(ingredients, isVegetarian, isVegan, index)
+    ));
+      return recipes;
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+      throw error;
+    }
+  };
 
 export const fetchImage = async (recipeName, recipeDescription) => {
     try {
@@ -81,17 +101,10 @@ export const sendAudio = async (uri, onTranscription) => {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        console.log(`response.data: ${response.data.ingredients[0]}`); // Handle the API response
+        console.log(`response.data: ${response.data.ingredients}`); // Handle the API response
         console.log(`response.data before dicing: ${response.data.ingredients}`); // Handle the API response
-
-        if (response.data.ingredients[0] === undefined) {
-            console.log('returning empty')
-            return ' ';
-        }
           
-        x = response.data.ingredients[0].split(", ,");
-        x = x.join(', ');
-        console.log(`response.data processed: ${x}`);
+        x = response.data.ingredients;
         return x;
 
     } catch (error) {

@@ -36,10 +36,8 @@ const RecipeScreen = ({ route }) => {
           setImageLoading(false);
         } else {
           try {
-            const fetchedRecipes = await fetchRecipes(ingredients);
-            const fetchedImages = await Promise.all(
-              fetchedRecipes.map(recipe => fetchImage(recipe.name, recipe.description))
-            );
+            const fetchedRecipes = await fetchRecipes(ingredients); // Adjust the number as needed
+            const fetchedImages = fetchedRecipes.map(recipe => recipe.image);
             setRecipes(fetchedRecipes);
             setImages(fetchedImages);
             setLoading(false);
