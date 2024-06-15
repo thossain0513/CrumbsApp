@@ -21,7 +21,7 @@ const getRandomIndices = (num_recipes) => {
 };
 
 const generateRecipe = async (ingredients, isVegetarian = false, isVegan = false, index) => {
-    const response = await axios.post(`http://${localIP}:8000/generate_single_recipe?index=${index}`, {
+    const response = await axios.post(`http://${localIP}:8000/recipe/generate_single_recipe?index=${index}`, {
       ingredients: ingredients,
       is_vegetarian: isVegetarian,
       is_vegan: isVegan
