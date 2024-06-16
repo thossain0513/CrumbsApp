@@ -20,11 +20,31 @@ const getRandomIndices = (num_recipes) => {
   return indices.slice(0, num_recipes);
 };
 
+const normalizeRecipeName = (name) => {
+    return name.toLowerCase().replace(/[^a-z]/g, '');
+  };
+  
+const filterUniqueRecipes = (recipes) => {
+    const uniqueRecipes = [];
+    const recipeNames = new Set();
+  
+    for (const recipe of recipes) {
+      const normalizedName = normalizeRecipeName(recipe.name);
+      if (!recipeNames.has(normalizedName)) {
+        uniqueRecipes.push(recipe);
+        recipeNames.add(normalizedName);
+      }
+    }
+  
+    return uniqueRecipes;
+  };
+
 const generateRecipe = async (ingredients, isVegetarian = false, isVegan = false, index) => {
-    const response = await axios.post(`http://${localIP}:8000/recipe/generate_single_recipe?index=${index}`, {
+    const response = await axios.post(`http://${localIP}:8000/recipe/generate_single_recipe`, {
       ingredients: ingredients,
       is_vegetarian: isVegetarian,
-      is_vegan: isVegan
+      is_vegan: isVegan,
+      seed: index
     });
     return response.data;
   };
@@ -36,7 +56,37 @@ export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = 
         randomIndices.map((index) =>
         generateRecipe(ingredients, isVegetarian, isVegan, index)
     ));
-      return recipes;
+
+      // Filter out duplicate recipes by name
+    return filterUniqueRecipes(recipes);
+
+    } catch (error) {
+      console.error('Error fetching recipes:', error);
+      throw error;
+    }
+  };
+
+  export const fetchMultipleRecipes = async (ingredients, isVegetarian = false, isVegan = false, num_recipes = 3) => {
+    const randomIndices = getRandomIndices(num_recipes);
+  
+    const requests = randomIndices.map((index) => ({
+      ingredients: ingredients,
+      is_vegetarian: isVegetarian,
+      is_vegan: isVegan,
+      seed: index
+    }));
+  
+    const requestBody = {
+      req: requests,
+    };
+  
+    try {
+      const response = await axios.post(`http://${localIP}:8000/recipe/generate_recipes`, requestBody);
+      const recipes = response.data;
+  
+      // Filter out duplicate recipes by name
+      return filterUniqueRecipes(recipes);
+      
     } catch (error) {
       console.error('Error fetching recipes:', error);
       throw error;

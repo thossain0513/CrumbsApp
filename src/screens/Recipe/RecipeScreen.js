@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Image, ActivityIndicator, StyleSheet, Dimensions, Text, Button } from 'react-native';
-import { fetchRecipes, fetchImage } from '../../helpers'; // Adjust the import path to '../../helpers'
+import { fetchRecipes, fetchMultipleRecipes } from '../../helpers'; // Adjust the import path to '../../helpers'
 import Accordion from '../../components/Accordion';
 import RecipeDetails from '../../components/RecipeDetails';
 import Carousel from 'react-native-reanimated-carousel';
@@ -36,7 +36,7 @@ const RecipeScreen = ({ route }) => {
           setImageLoading(false);
         } else {
           try {
-            const fetchedRecipes = await fetchRecipes(ingredients); // Adjust the number as needed
+            const fetchedRecipes = await fetchMultipleRecipes(ingredients); // Adjust the number as needed
             const fetchedImages = fetchedRecipes.map(recipe => recipe.image);
             setRecipes(fetchedRecipes);
             setImages(fetchedImages);
