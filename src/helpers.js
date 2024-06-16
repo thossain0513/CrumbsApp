@@ -3,22 +3,17 @@ import axios from 'axios';
 
 export const localIP = "10.0.0.5" //change this to your local IP address, find it on your terminal, ask ChatGPT how to find it in your terminal
 
-
-const seedrandom = require('seedrandom');
-
 const getRandomIndices = (num_recipes) => {
-  const seed = Math.floor(Math.random() * 1000000);
-  const random = seedrandom(seed.toString());
-
-  const indices = Array.from({ length: 1000 }, (_, i) => i);
-
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [indices[i], indices[j]] = [indices[j], indices[i]];
-  }
-
-  return indices.slice(0, num_recipes);
-};
+    const seed = Math.floor(Math.random() * (1000000 - num_recipes + 1));
+    const indices = [];
+  
+    for (let i = 0; i < num_recipes; i++) {
+      indices.push(seed + i);
+    }
+  
+    return indices;
+  };
+  
 
 const normalizeRecipeName = (name) => {
     return name.toLowerCase().replace(/[^a-z]/g, '');
@@ -39,32 +34,32 @@ const filterUniqueRecipes = (recipes) => {
     return uniqueRecipes;
   };
 
-const generateRecipe = async (ingredients, isVegetarian = false, isVegan = false, index) => {
-    const response = await axios.post(`http://${localIP}:8000/recipe/generate_single_recipe`, {
-      ingredients: ingredients,
-      is_vegetarian: isVegetarian,
-      is_vegan: isVegan,
-      seed: index
-    });
-    return response.data;
-  };
+// const generateRecipe = async (ingredients, isVegetarian = false, isVegan = false, index) => {
+//     const response = await axios.post(`http://${localIP}:8000/recipe/generate_single_recipe`, {
+//       ingredients: ingredients,
+//       is_vegetarian: isVegetarian,
+//       is_vegan: isVegan,
+//       seed: index
+//     });
+//     return response.data;
+//   };
 
-export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false, num_recipes = 3) => {
-    const randomIndices = getRandomIndices(num_recipes);
-    try {
-      const recipes = await Promise.all(
-        randomIndices.map((index) =>
-        generateRecipe(ingredients, isVegetarian, isVegan, index)
-    ));
+// export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = false, num_recipes = 3) => {
+//     const randomIndices = getRandomIndices(num_recipes);
+//     try {
+//       const recipes = await Promise.all(
+//         randomIndices.map((index) =>
+//         generateRecipe(ingredients, isVegetarian, isVegan, index)
+//     ));
 
-      // Filter out duplicate recipes by name
-    return filterUniqueRecipes(recipes);
+//       // Filter out duplicate recipes by name
+//     return filterUniqueRecipes(recipes);
 
-    } catch (error) {
-      console.error('Error fetching recipes:', error);
-      throw error;
-    }
-  };
+//     } catch (error) {
+//       console.error('Error fetching recipes:', error);
+//       throw error;
+//     }
+//   };
 
   export const fetchMultipleRecipes = async (ingredients, isVegetarian = false, isVegan = false, num_recipes = 3) => {
     const randomIndices = getRandomIndices(num_recipes);
@@ -86,7 +81,7 @@ export const fetchRecipes = async (ingredients, isVegetarian = false, isVegan = 
   
       // Filter out duplicate recipes by name
       return filterUniqueRecipes(recipes);
-      
+
     } catch (error) {
       console.error('Error fetching recipes:', error);
       throw error;

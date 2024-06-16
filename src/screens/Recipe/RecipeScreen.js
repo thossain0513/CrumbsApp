@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Image, ActivityIndicator, StyleSheet, Dimensions, Text, Button } from 'react-native';
-import { fetchRecipes, fetchMultipleRecipes } from '../../helpers'; // Adjust the import path to '../../helpers'
+import { fetchMultipleRecipes } from '../../helpers'; // Adjust the import path to '../../helpers'
 import Accordion from '../../components/Accordion';
 import RecipeDetails from '../../components/RecipeDetails';
 import Carousel from 'react-native-reanimated-carousel';

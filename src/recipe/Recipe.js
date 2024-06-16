@@ -10,6 +10,7 @@ function createRecipe({
   isVegan=false,
   isVegetarian=false,
   image='https://furntech.org.za/wp-content/uploads/2017/05/placeholder-image-300x225.png',
+  tags=[]
 }) {
   return {
     name,
@@ -19,7 +20,8 @@ function createRecipe({
     cuisine,
     prepTime,
     servings,
-    image
+    image,
+    tags
   };
 }
 

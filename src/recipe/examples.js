@@ -10,7 +10,8 @@ instructions: [
     'Bake for 20 minutes'],
 cuisine: 'American',
 prepTime: "30 minutes",
-servings: 4
+servings: 4,
+tags: ['meat', 'easy', 'quick']
 });
 
 export const grilledCheese = createRecipe({
@@ -23,7 +24,8 @@ export const grilledCheese = createRecipe({
         'Grill until golden'],
     cuisine: 'American',
     prepTime: '5 minutes',
-    servings: 1
+    servings: 1,
+    tags: ['meat', 'easy', 'quick']
 });
 
 export const chickenFajitas = createRecipe({
@@ -38,7 +40,8 @@ export const chickenFajitas = createRecipe({
     ],
     cuisine: 'Mexican',
     prepTime: '30 Minutes',
-    servings: 4
+    servings: 4,
+    tags: ['meat', 'easy', 'quick']
   });
 
   export const roastedVegetables = createRecipe({
@@ -48,7 +51,8 @@ export const chickenFajitas = createRecipe({
     instructions: ['Toss with oil and seasoning', 'Roast in oven'],
     cuisine: "White People Food",
     prepTime: "25 minutes",
-    servings: 6
+    servings: 6,
+    tags: ['meat', 'easy', 'quick']
   });
 
   export const chocolateCake = createRecipe({
@@ -62,7 +66,8 @@ export const chickenFajitas = createRecipe({
     ],
     cuisine: "Dessert",
     prepTime: "35 minutes",
-    servings: 8
+    servings: 8,
+    tags: ['meat', 'easy', 'quick']
   });
 
   export const chickenTikkaMasala = createRecipe({
@@ -76,5 +81,6 @@ export const chickenFajitas = createRecipe({
     ],
     cuisine: "Indian",
     prepTime: "30 minutes",
-    servings: 6
+    servings: 6,
+    tags: ['meat', 'easy', 'quick']
   });
