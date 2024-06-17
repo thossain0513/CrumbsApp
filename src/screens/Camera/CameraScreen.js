@@ -14,7 +14,7 @@ export default function CameraScreen({ navigation }) {
       setIsProcessing(true);
       const photo = await cameraRef.current.takePictureAsync({
         quality: 1,
-        base64: true
+        base64: true,
       });
       console.log('Took photo');
       const { base64 } = photo;
@@ -22,17 +22,17 @@ export default function CameraScreen({ navigation }) {
       // Navigate to RecipeScreen with loading state
       navigation.navigate('RecipeScreen', { isLoading: true, isFromCamera: true });
 
-      const ing = await sendPhotoToAPI(base64);
-      if (ing && ing.trim() !== ' ') {
-        // Navigate to RecipeScreen with the fetched ingredients
-        navigation.navigate('RecipeScreen', { ingredients: ing, isLoading: false, isFromCamera: true });
+      const recipes = await sendPhotoToAPI(base64);
+      if (recipes && recipes.length > 0) {
+        // Update RecipeScreen with the fetched recipes
+        navigation.navigate('RecipeScreen', { recipes, isLoading: false });
       } else {
-        // Navigate to RecipeScreen with an error flag
-        navigation.navigate('RecipeScreen', { isLoading: false, error: 'Failed to generate recipe', isFromCamera: true });
+        // Update RecipeScreen with an error flag
+        navigation.navigate('RecipeScreen', { error: 'Failed to generate recipes', isLoading: false });
       }
     } catch (error) {
       console.error('Error taking or uploading photo:', error);
-      navigation.navigate('RecipeScreen', { isLoading: false, error: 'Failed to generate recipe', isFromCamera: true });
+      navigation.navigate('RecipeScreen', { error: 'Failed to generate recipes', isLoading: false });
     } finally {
       setIsProcessing(false);
     }
@@ -59,19 +59,14 @@ export default function CameraScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <CameraView
-        ref={cameraRef}
-        style={styles.camera}
-        isActive={true}
-        photo={true}
-      >
+      <CameraView ref={cameraRef} style={styles.camera} isActive={true} photo={true}>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={takePicture}>
             <Text style={styles.text}>Take Photo</Text>
           </TouchableOpacity>
         </View>
       </CameraView>
-      <FooterNav navigation={navigation}/>
+      <FooterNav navigation={navigation} />
     </View>
   );
 }
@@ -81,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     position: 'relative',
-    flexDirection: 'column'
+    flexDirection: 'column',
   },
   camera: {
     flex: 1,
@@ -96,7 +91,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'flex-end',
     alignItems: 'center',
-    marginBottom: '20%'
+    marginBottom: '20%',
   },
   text: {
     fontSize: 24,

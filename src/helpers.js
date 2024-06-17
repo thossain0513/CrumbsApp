@@ -108,7 +108,7 @@ export const sendAudio = async (uri, onTranscription) => {
     }
   };
   
-  export const sendPhotoToAPI = async (base64) => {
+  export const sendPhotoToAPI = async (base64, num_recipes = 3) => {
     console.log('sending photo');
 
     try {
@@ -116,18 +116,20 @@ export const sendAudio = async (uri, onTranscription) => {
         // Construct the payload
         const payload = {
             file: `data:image/jpeg;base64,${base64}`, // Adjust MIME type if necessary
+            num_recipes: num_recipes
         };
 
         // Send the payload to the API
-        const response = await axios.post(`http://${localIP}:8000/analyze`, payload, {
+        const response = await axios.post(`http://${localIP}:8000/recipe/analyze`, payload, {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        console.log(`response.data: ${response.data.ingredients}`); // Handle the API response
-        console.log(`response.data before dicing: ${response.data.ingredients}`); // Handle the API response
+        console.log(`response.data: ${response.data}`); // Handle the API response
+        console.log(`response.data recipes: ${response.data.recipes}`); // Handle the API response
           
-        x = response.data.ingredients;
-        return x;
+        x = response.data.recipes;
+        y = filterUniqueRecipes(x);
+        return y;
 
     } catch (error) {
         console.error(error);

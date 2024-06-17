@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ScrollView, View, Image, ActivityIndicator, StyleSheet, Dimensions, Text, Button } from 'react-native';
-import { fetchMultipleRecipes } from '../../helpers'; // Adjust the import path to '../../helpers'
 import Accordion from '../../components/Accordion';
 import RecipeDetails from '../../components/RecipeDetails';
 import Carousel from 'react-native-reanimated-carousel';
@@ -9,58 +8,30 @@ import { useSharedValue } from 'react-native-reanimated';
 const { width, height } = Dimensions.get('window');
 
 const RecipeScreen = ({ route }) => {
-  const [recipes, setRecipes] = useState(route.params?.recipe ? [route.params.recipe] : []);
-  const [images, setImages] = useState(route.params?.recipe && route.params.recipe.image ? [route.params.recipe.image] : []);
-  const [loading, setLoading] = useState(true);
+  const [recipes, setRecipes] = useState(route.params?.recipes || []);
+  const [images, setImages] = useState(route.params?.recipes?.map(recipe => recipe.image) || []);
+  const [loading, setLoading] = useState(route.params?.isLoading || false);
   const [error, setError] = useState(route.params?.error || null);
-  const [isFromCamera, setIsFromCamera] = useState(route.params?.isFromCamera || false);
   const progress = useSharedValue(0);
   const carouselRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imageLoading, setImageLoading] = useState(true);
-  const ingredients = route.params?.ingredients;
-  const recipe = route.params?.recipe;
-  console.log(`isFromCamera: ${isFromCamera}`);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (recipe) {
-        setRecipes([recipe]);
-        setImages([recipe.image]);
-        setLoading(false);
-        setImageLoading(false);
-      } else if (ingredients) {
-        if (ingredients.trim() === '') {
-          setError('Failed to generate recipe');
-          setLoading(false);
-          setImageLoading(false);
-        } else {
-          try {
-            const fetchedRecipes = await fetchMultipleRecipes(ingredients); // Adjust the number as needed
-            const fetchedImages = fetchedRecipes.map(recipe => recipe.image);
-            setRecipes(fetchedRecipes);
-            setImages(fetchedImages);
-            setLoading(false);
-            setImageLoading(false);
-          } catch (error) {
-            console.error('Error loading data:', error);
-            setError('Failed to generate recipe');
-            setLoading(false);
-            setImageLoading(false);
-          }
-        }
-      } else if (isFromCamera) {
-        setLoading(true);
-        setImageLoading(true);
-      } else {
-        setLoading(false);
-        setError('No recipe or ingredients provided');
-        setImageLoading(false);
-      }
-    };
-    
-    loadData();
-  }, [ingredients, recipe, isFromCamera]);
+    if (route.params?.isLoading) {
+      // Simulate loading process if it was set to true initially
+      setLoading(true);
+    } else if (route.params?.recipes) {
+      setRecipes(route.params.recipes);
+      setImages(route.params.recipes.map(recipe => recipe.image));
+      setLoading(false);
+      setImageLoading(false);
+    } else if (route.params?.error) {
+      setError(route.params.error);
+      setLoading(false);
+      setImageLoading(false);
+    }
+  }, [route.params]);
 
   const handleNextRecipe = () => {
     if (carouselRef.current && currentIndex < recipes.length - 1) {
@@ -218,4 +189,3 @@ const styles = StyleSheet.create({
 });
 
 export default RecipeScreen;
-
