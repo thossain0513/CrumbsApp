@@ -77,5 +77,4 @@ Once you find your local IP address, navigate to the `helpers.js` file and then 
    ```bash
    npx expo start
 
-The pages are all in testing right now, so they're really disorganized. The Profile button navigates to the login page as of now. The Start Recording button is the main feature available on the
-application as of now, where you speak to the app and list ingredients that you have available to you, and it will load 3 swipable recipe cards.
+The pages are all in testing right now, so they're really disorganized. Navigate to the Camera page, take a picture of your ingredients, and let the recommendations come.
