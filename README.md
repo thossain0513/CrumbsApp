@@ -1,12 +1,9 @@
-# Lab 1: Containerizing a Basic API
-
+# Crumbs
 ## Overview 
 
 Welcome to Crumbs, the AI-driven recipe recommendation tool. This is a React Native App run using expo. We use the following architectures to run the application:
 
 - Supabase for database and authentication
-- Twilio Verify to log in with phone number (also connected to the Supabase project for verification)
-- Google Account Authentication (also connected to the Supabase project for verification)
 - Email Login (connected to Supabase)
 
 
